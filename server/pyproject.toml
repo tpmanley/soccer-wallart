@@ -3,6 +3,7 @@ name = "soccer-wallart"
 version = "0.1.0"
 description = "Retro soccer fixture posters for a color e-ink wall display"
 requires-python = ">=3.11"
+license = "MIT"
 dependencies = [
   "fastapi>=0.110",
   "uvicorn>=0.29",

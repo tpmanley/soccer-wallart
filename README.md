@@ -108,3 +108,10 @@ byte for byte, so there's no image library on the device.
 ```sh
 cd server && .venv/bin/pytest
 ```
+
+## License
+
+MIT; see [LICENSE](LICENSE). The bundled fonts are under the SIL Open Font License
+(their license files sit next to them in `server/soccer_wallart/art/fonts/`). Fixture data
+comes from ESPN's public site API at runtime and isn't part of this repo; the test data in
+`server/tests/fixtures/` is a minimal subset of fields, kept only for parser tests.
