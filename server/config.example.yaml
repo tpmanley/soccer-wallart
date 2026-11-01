@@ -1,0 +1,36 @@
+# Copy to config.yaml and edit. Find team ids with:
+#   soccer-wallart find-team usa.1 minnesota
+timezone: America/Chicago
+
+# Your teams. `leagues` = every competition they play in (scanned for their matches).
+teams:
+  - name: Minnesota United
+    espn_id: 17362
+    leagues: [usa.1, concacaf.champions, usa.open]
+    # colors: [black, blue]   # optional poster colors: black white red yellow blue green
+
+# Whole leagues to show fixtures from.
+# Common ESPN slugs: eng.1 (Premier League), uefa.champions, uefa.europa, esp.1 (La Liga),
+# ger.1, ita.1, fra.1, usa.1 (MLS), usa.nwsl, fifa.world
+leagues: [eng.1, uefa.champions]
+
+# What gets the big poster, in order. "teams" = any of your teams; or a league slug / team id.
+featured_priority: [teams, uefa.champions, eng.1]
+
+list_size: 5          # fixtures in the NEXT UP column
+lookahead_days: 7
+
+refresh:
+  daily_at: "06:00"          # always refresh at this local time
+  after_match_minutes: 150   # refresh this long after kickoff (shows the result)
+  live_minutes: 30           # refresh cadence while a match is live
+  min_minutes: 15
+  max_hours: 12
+
+display:
+  width: 800
+  height: 480
+  clock: 12h                 # or 24h
+
+cache_dir: .cache
+cache_ttl_minutes: 60

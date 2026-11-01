@@ -1,0 +1,238 @@
+{
+ "leagues": [
+  {
+   "name": "Spanish LALIGA",
+   "slug": "esp.1"
+  }
+ ],
+ "events": [
+  {
+   "id": "401882812",
+   "date": "2026-11-07T13:00Z",
+   "competitions": [
+    {
+     "date": "2026-11-07T13:00Z",
+     "status": {
+      "type": {
+       "name": "STATUS_SCHEDULED",
+       "state": "pre",
+       "completed": false,
+       "description": "Scheduled",
+       "shortDetail": "Scheduled"
+      }
+     },
+     "competitors": [
+      {
+       "homeAway": "home",
+       "score": "0",
+       "team": {
+        "id": "99",
+        "displayName": "Málaga",
+        "shortDisplayName": "Málaga",
+        "name": "Málaga",
+        "abbreviation": "MCF",
+        "color": "b9e8f0",
+        "alternateColor": "D19CA4"
+       }
+      },
+      {
+       "homeAway": "away",
+       "score": "0",
+       "team": {
+        "id": "87",
+        "displayName": "Racing Santander",
+        "shortDisplayName": "Racing",
+        "name": "Racing Santander",
+        "abbreviation": "RAC",
+        "color": "ffffff",
+        "alternateColor": "3B6C1A"
+       }
+      }
+     ],
+     "venue": {
+      "fullName": "La Rosaleda"
+     },
+     "broadcasts": [
+      {
+       "names": [
+        "ESPN Deportes",
+        "ESPN+"
+       ]
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "id": "401882813",
+   "date": "2026-11-07T15:15Z",
+   "competitions": [
+    {
+     "date": "2026-11-07T15:15Z",
+     "status": {
+      "type": {
+       "name": "STATUS_SCHEDULED",
+       "state": "pre",
+       "completed": false,
+       "description": "Scheduled",
+       "shortDetail": "Scheduled"
+      }
+     },
+     "competitors": [
+      {
+       "homeAway": "home",
+       "score": "0",
+       "team": {
+        "id": "88",
+        "displayName": "Espanyol",
+        "shortDisplayName": "Espanyol",
+        "name": "Espanyol",
+        "abbreviation": "ESP",
+        "color": "3366CC",
+        "alternateColor": "C8142F"
+       }
+      },
+      {
+       "homeAway": "away",
+       "score": "0",
+       "team": {
+        "id": "90",
+        "displayName": "Deportivo",
+        "shortDisplayName": "Deportivo",
+        "name": "Deportivo",
+        "abbreviation": "DEP",
+        "color": "3366CC",
+        "alternateColor": "000000"
+       }
+      }
+     ],
+     "venue": {
+      "fullName": "RCDE Stadium"
+     },
+     "broadcasts": [
+      {
+       "names": [
+        "ESPN Deportes",
+        "ESPN+"
+       ]
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "id": "401882811",
+   "date": "2026-11-07T17:30Z",
+   "competitions": [
+    {
+     "date": "2026-11-07T17:30Z",
+     "status": {
+      "type": {
+       "name": "STATUS_SCHEDULED",
+       "state": "pre",
+       "completed": false,
+       "description": "Scheduled",
+       "shortDetail": "Scheduled"
+      }
+     },
+     "competitors": [
+      {
+       "homeAway": "home",
+       "score": "0",
+       "team": {
+        "id": "97",
+        "displayName": "Osasuna",
+        "shortDisplayName": "Osasuna",
+        "name": "Osasuna",
+        "abbreviation": "OSA",
+        "color": "cd0000",
+        "alternateColor": "ffffff"
+       }
+      },
+      {
+       "homeAway": "away",
+       "score": "0",
+       "team": {
+        "id": "93",
+        "displayName": "Athletic Club",
+        "shortDisplayName": "Athletic",
+        "name": "Athletic Club",
+        "abbreviation": "ATH",
+        "color": "C8142F",
+        "alternateColor": "000000"
+       }
+      }
+     ],
+     "venue": {
+      "fullName": "El Sadar"
+     },
+     "broadcasts": [
+      {
+       "names": [
+        "ESPN Deportes",
+        "ESPN+"
+       ]
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "id": "401882808",
+   "date": "2026-11-07T20:00Z",
+   "competitions": [
+    {
+     "date": "2026-11-07T20:00Z",
+     "status": {
+      "type": {
+       "name": "STATUS_SCHEDULED",
+       "state": "pre",
+       "completed": false,
+       "description": "Scheduled",
+       "shortDetail": "Scheduled"
+      }
+     },
+     "competitors": [
+      {
+       "homeAway": "home",
+       "score": "0",
+       "team": {
+        "id": "94",
+        "displayName": "Valencia",
+        "shortDisplayName": "Valencia",
+        "name": "Valencia",
+        "abbreviation": "VAL",
+        "color": "ffffff",
+        "alternateColor": "FF6F00"
+       }
+      },
+      {
+       "homeAway": "away",
+       "score": "0",
+       "team": {
+        "id": "86",
+        "displayName": "Real Madrid",
+        "shortDisplayName": "Real Madrid",
+        "name": "Real Madrid",
+        "abbreviation": "RMA",
+        "color": "ffffff",
+        "alternateColor": "1B4D3E"
+       }
+      }
+     ],
+     "venue": {
+      "fullName": "Mestalla Stadium"
+     },
+     "broadcasts": [
+      {
+       "names": [
+        "ESPN Deportes",
+        "ESPN+"
+       ]
+      }
+     ]
+    }
+   ]
+  }
+ ]
+}

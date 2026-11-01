@@ -1,0 +1,514 @@
+{
+ "leagues": [
+  {
+   "name": "UEFA Champions League",
+   "slug": "uefa.champions"
+  }
+ ],
+ "events": [
+  {
+   "id": "401915383",
+   "date": "2026-11-04T17:45Z",
+   "competitions": [
+    {
+     "date": "2026-11-04T17:45Z",
+     "status": {
+      "type": {
+       "name": "STATUS_SCHEDULED",
+       "state": "pre",
+       "completed": false,
+       "description": "Scheduled",
+       "shortDetail": "Scheduled"
+      }
+     },
+     "competitors": [
+      {
+       "homeAway": "home",
+       "score": "0",
+       "team": {
+        "id": "887",
+        "displayName": "AEK Athens",
+        "shortDisplayName": "AEK Athens",
+        "name": "AEK Athens",
+        "abbreviation": "AEK",
+        "color": "ffff00",
+        "alternateColor": "000000"
+       }
+      },
+      {
+       "homeAway": "away",
+       "score": "0",
+       "team": {
+        "id": "86",
+        "displayName": "Real Madrid",
+        "shortDisplayName": "Real Madrid",
+        "name": "Real Madrid",
+        "abbreviation": "RMA",
+        "color": "ffffff",
+        "alternateColor": "1B4D3E"
+       }
+      }
+     ],
+     "venue": {
+      "fullName": "OPAP Arena"
+     },
+     "broadcasts": [
+      {
+       "names": [
+        "Paramount+"
+       ]
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "id": "401915382",
+   "date": "2026-11-04T17:45Z",
+   "competitions": [
+    {
+     "date": "2026-11-04T17:45Z",
+     "status": {
+      "type": {
+       "name": "STATUS_SCHEDULED",
+       "state": "pre",
+       "completed": false,
+       "description": "Scheduled",
+       "shortDetail": "Scheduled"
+      }
+     },
+     "competitors": [
+      {
+       "homeAway": "home",
+       "score": "0",
+       "team": {
+        "id": "436",
+        "displayName": "Fenerbahce",
+        "shortDisplayName": "Fenerbahce",
+        "name": "Fenerbahce",
+        "abbreviation": "FEN",
+        "color": "ffff00",
+        "alternateColor": "ffffff"
+       }
+      },
+      {
+       "homeAway": "away",
+       "score": "0",
+       "team": {
+        "id": "364",
+        "displayName": "Liverpool",
+        "shortDisplayName": "Liverpool",
+        "name": "Liverpool",
+        "abbreviation": "LIV",
+        "color": "d11317",
+        "alternateColor": "FFFFFF"
+       }
+      }
+     ],
+     "venue": {
+      "fullName": "Şükrü Saracoğlu Stadium"
+     },
+     "broadcasts": [
+      {
+       "names": [
+        "Paramount+"
+       ]
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "id": "401915304",
+   "date": "2026-11-04T20:00Z",
+   "competitions": [
+    {
+     "date": "2026-11-04T20:00Z",
+     "status": {
+      "type": {
+       "name": "STATUS_SCHEDULED",
+       "state": "pre",
+       "completed": false,
+       "description": "Scheduled",
+       "shortDetail": "Scheduled"
+      }
+     },
+     "competitors": [
+      {
+       "homeAway": "home",
+       "score": "0",
+       "team": {
+        "id": "124",
+        "displayName": "Borussia Dortmund",
+        "shortDisplayName": "Dortmund",
+        "name": "Borussia Dortmund",
+        "abbreviation": "DOR",
+        "color": "ffee00",
+        "alternateColor": "272726"
+       }
+      },
+      {
+       "homeAway": "away",
+       "score": "0",
+       "team": {
+        "id": "244",
+        "displayName": "Real Betis",
+        "shortDisplayName": "Betis",
+        "name": "Real Betis",
+        "abbreviation": "BET",
+        "color": "288A00",
+        "alternateColor": "0A422D"
+       }
+      }
+     ],
+     "venue": {
+      "fullName": "Signal Iduna Park"
+     },
+     "broadcasts": [
+      {
+       "names": [
+        "Paramount+"
+       ]
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "id": "401915301",
+   "date": "2026-11-04T20:00Z",
+   "competitions": [
+    {
+     "date": "2026-11-04T20:00Z",
+     "status": {
+      "type": {
+       "name": "STATUS_SCHEDULED",
+       "state": "pre",
+       "completed": false,
+       "description": "Scheduled",
+       "shortDetail": "Scheduled"
+      }
+     },
+     "competitors": [
+      {
+       "homeAway": "home",
+       "score": "0",
+       "team": {
+        "id": "437",
+        "displayName": "FC Porto",
+        "shortDisplayName": "FC Porto",
+        "name": "FC Porto",
+        "abbreviation": "FCP",
+        "color": "0000dd",
+        "alternateColor": "ffa000"
+       }
+      },
+      {
+       "homeAway": "away",
+       "score": "0",
+       "team": {
+        "id": "114",
+        "displayName": "Napoli",
+        "shortDisplayName": "Napoli",
+        "name": "Napoli",
+        "abbreviation": "NAP",
+        "color": "0677d2",
+        "alternateColor": "ffffff"
+       }
+      }
+     ],
+     "venue": {
+      "fullName": "Estádio do Dragão"
+     },
+     "broadcasts": [
+      {
+       "names": [
+        "Paramount+"
+       ]
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "id": "401915305",
+   "date": "2026-11-04T20:00Z",
+   "competitions": [
+    {
+     "date": "2026-11-04T20:00Z",
+     "status": {
+      "type": {
+       "name": "STATUS_SCHEDULED",
+       "state": "pre",
+       "completed": false,
+       "description": "Scheduled",
+       "shortDetail": "Scheduled"
+      }
+     },
+     "competitors": [
+      {
+       "homeAway": "home",
+       "score": "0",
+       "team": {
+        "id": "175",
+        "displayName": "Lens",
+        "shortDisplayName": "Lens",
+        "name": "Lens",
+        "abbreviation": "RCL",
+        "color": "E91514",
+        "alternateColor": "004c37"
+       }
+      },
+      {
+       "homeAway": "away",
+       "score": "0",
+       "team": {
+        "id": "2572",
+        "displayName": "Como",
+        "shortDisplayName": "Como",
+        "name": "Como",
+        "abbreviation": "COMO",
+        "color": "4169E1",
+        "alternateColor": "FFFFFF"
+       }
+      }
+     ],
+     "venue": {
+      "fullName": "Stade Bollaert-Delelis"
+     },
+     "broadcasts": [
+      {
+       "names": [
+        "Paramount+"
+       ]
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "id": "401915303",
+   "date": "2026-11-04T20:00Z",
+   "competitions": [
+    {
+     "date": "2026-11-04T20:00Z",
+     "status": {
+      "type": {
+       "name": "STATUS_SCHEDULED",
+       "state": "pre",
+       "completed": false,
+       "description": "Scheduled",
+       "shortDetail": "Scheduled"
+      }
+     },
+     "competitors": [
+      {
+       "homeAway": "home",
+       "score": "0",
+       "team": {
+        "id": "148",
+        "displayName": "PSV Eindhoven",
+        "shortDisplayName": "PSV",
+        "name": "PSV Eindhoven",
+        "abbreviation": "PSV",
+        "color": "ef2f24",
+        "alternateColor": "000000"
+       }
+      },
+      {
+       "homeAway": "away",
+       "score": "0",
+       "team": {
+        "id": "570",
+        "displayName": "Club Brugge",
+        "shortDisplayName": "Club Brugge",
+        "name": "Club Brugge",
+        "abbreviation": "BRU",
+        "color": "0081ff",
+        "alternateColor": "ffffff"
+       }
+      }
+     ],
+     "venue": {
+      "fullName": "Philips Stadion"
+     },
+     "broadcasts": [
+      {
+       "names": [
+        "Paramount+"
+       ]
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "id": "401915306",
+   "date": "2026-11-04T20:00Z",
+   "competitions": [
+    {
+     "date": "2026-11-04T20:00Z",
+     "status": {
+      "type": {
+       "name": "STATUS_SCHEDULED",
+       "state": "pre",
+       "completed": false,
+       "description": "Scheduled",
+       "shortDetail": "Scheduled"
+      }
+     },
+     "competitors": [
+      {
+       "homeAway": "home",
+       "score": "0",
+       "team": {
+        "id": "11420",
+        "displayName": "RB Leipzig",
+        "shortDisplayName": "RB Leipzig",
+        "name": "RB Leipzig",
+        "abbreviation": "RBL",
+        "color": "ffffff",
+        "alternateColor": "740c14"
+       }
+      },
+      {
+       "homeAway": "away",
+       "score": "0",
+       "team": {
+        "id": "382",
+        "displayName": "Manchester City",
+        "shortDisplayName": "Man City",
+        "name": "Manchester City",
+        "abbreviation": "MNC",
+        "color": "99c5ea",
+        "alternateColor": "000000"
+       }
+      }
+     ],
+     "venue": {
+      "fullName": "Red Bull Arena"
+     },
+     "broadcasts": [
+      {
+       "names": [
+        "Paramount+"
+       ]
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "id": "401915381",
+   "date": "2026-11-04T20:00Z",
+   "competitions": [
+    {
+     "date": "2026-11-04T20:00Z",
+     "status": {
+      "type": {
+       "name": "STATUS_SCHEDULED",
+       "state": "pre",
+       "completed": false,
+       "description": "Scheduled",
+       "shortDetail": "Scheduled"
+      }
+     },
+     "competitors": [
+      {
+       "homeAway": "home",
+       "score": "0",
+       "team": {
+        "id": "494",
+        "displayName": "Slavia Prague",
+        "shortDisplayName": "Slavia Prague",
+        "name": "Slavia Prague",
+        "abbreviation": "SLP",
+        "color": "dc1f26",
+        "alternateColor": "81c0ff"
+       }
+      },
+      {
+       "homeAway": "away",
+       "score": "0",
+       "team": {
+        "id": "359",
+        "displayName": "Arsenal",
+        "shortDisplayName": "Arsenal",
+        "name": "Arsenal",
+        "abbreviation": "ARS",
+        "color": "e20520",
+        "alternateColor": "003399"
+       }
+      }
+     ],
+     "venue": {
+      "fullName": "Fortuna Arena"
+     },
+     "broadcasts": [
+      {
+       "names": [
+        "Paramount+"
+       ]
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "id": "401915302",
+   "date": "2026-11-04T20:00Z",
+   "competitions": [
+    {
+     "date": "2026-11-04T20:00Z",
+     "status": {
+      "type": {
+       "name": "STATUS_SCHEDULED",
+       "state": "pre",
+       "completed": false,
+       "description": "Scheduled",
+       "shortDetail": "Scheduled"
+      }
+     },
+     "competitors": [
+      {
+       "homeAway": "home",
+       "score": "0",
+       "team": {
+        "id": "510",
+        "displayName": "Viking FK",
+        "shortDisplayName": "Viking FK",
+        "name": "Viking FK",
+        "abbreviation": "VFK",
+        "color": "000080",
+        "alternateColor": "ffffff"
+       }
+      },
+      {
+       "homeAway": "away",
+       "score": "0",
+       "team": {
+        "id": "21922",
+        "displayName": "Sabah FK",
+        "shortDisplayName": "Sabah",
+        "name": "Sabah FK",
+        "abbreviation": "SAB",
+        "color": "000000",
+        "alternateColor": "FF1493"
+       }
+      }
+     ],
+     "venue": {
+      "fullName": "Viking Stadion"
+     },
+     "broadcasts": [
+      {
+       "names": [
+        "Paramount+"
+       ]
+      }
+     ]
+    }
+   ]
+  }
+ ]
+}

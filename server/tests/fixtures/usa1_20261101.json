@@ -1,0 +1,348 @@
+{
+ "leagues": [
+  {
+   "name": "MLS",
+   "slug": "usa.1"
+  }
+ ],
+ "events": [
+  {
+   "id": "761927",
+   "date": "2026-11-01T20:30Z",
+   "competitions": [
+    {
+     "date": "2026-11-01T20:30Z",
+     "status": {
+      "type": {
+       "name": "STATUS_SCHEDULED",
+       "state": "pre",
+       "completed": false,
+       "description": "Scheduled",
+       "shortDetail": "Scheduled"
+      }
+     },
+     "competitors": [
+      {
+       "homeAway": "home",
+       "score": "0",
+       "team": {
+        "id": "9727",
+        "displayName": "Vancouver Whitecaps",
+        "shortDisplayName": "Vancouver",
+        "name": "Vancouver Whitecaps",
+        "abbreviation": "VAN",
+        "color": "ffffff",
+        "alternateColor": "12284c"
+       }
+      },
+      {
+       "homeAway": "away",
+       "score": "0",
+       "team": {
+        "id": "9726",
+        "displayName": "Seattle Sounders FC",
+        "shortDisplayName": "Seattle",
+        "name": "Seattle Sounders FC",
+        "abbreviation": "SEA",
+        "color": "2dc84d",
+        "alternateColor": "0033a0"
+       }
+      }
+     ],
+     "venue": {
+      "fullName": "BC Place"
+     },
+     "broadcasts": [
+      {
+       "names": [
+        "Apple TV"
+       ]
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "id": "761931",
+   "date": "2026-11-01T21:30Z",
+   "competitions": [
+    {
+     "date": "2026-11-01T21:30Z",
+     "status": {
+      "type": {
+       "name": "STATUS_SCHEDULED",
+       "state": "pre",
+       "completed": false,
+       "description": "Scheduled",
+       "shortDetail": "Scheduled"
+      }
+     },
+     "competitors": [
+      {
+       "homeAway": "home",
+       "score": "0",
+       "team": {
+        "id": "18418",
+        "displayName": "Atlanta United FC",
+        "shortDisplayName": "Atlanta",
+        "name": "Atlanta United FC",
+        "abbreviation": "ATL",
+        "color": "9d2235",
+        "alternateColor": "aa9767"
+       }
+      },
+      {
+       "homeAway": "away",
+       "score": "0",
+       "team": {
+        "id": "7318",
+        "displayName": "Toronto FC",
+        "shortDisplayName": "Toronto",
+        "name": "Toronto FC",
+        "abbreviation": "TOR",
+        "color": "aa182c",
+        "alternateColor": "a2a9ad"
+       }
+      }
+     ],
+     "venue": {
+      "fullName": "Mercedes-Benz Stadium"
+     },
+     "broadcasts": [
+      {
+       "names": [
+        "Apple TV"
+       ]
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "id": "761920",
+   "date": "2026-11-01T21:30Z",
+   "competitions": [
+    {
+     "date": "2026-11-01T21:30Z",
+     "status": {
+      "type": {
+       "name": "STATUS_SCHEDULED",
+       "state": "pre",
+       "completed": false,
+       "description": "Scheduled",
+       "shortDetail": "Scheduled"
+      }
+     },
+     "competitors": [
+      {
+       "homeAway": "home",
+       "score": "0",
+       "team": {
+        "id": "18986",
+        "displayName": "Nashville SC",
+        "shortDisplayName": "Nashville",
+        "name": "Nashville SC",
+        "abbreviation": "NSH",
+        "color": "ece83a",
+        "alternateColor": "1f1646"
+       }
+      },
+      {
+       "homeAway": "away",
+       "score": "0",
+       "team": {
+        "id": "190",
+        "displayName": "Red Bull New York",
+        "shortDisplayName": "Red Bull NY",
+        "name": "Red Bull New York",
+        "abbreviation": "RBNY",
+        "color": "ba0c2f",
+        "alternateColor": "ffc72c"
+       }
+      }
+     ],
+     "venue": {
+      "fullName": "GEODIS Park"
+     },
+     "broadcasts": [
+      {
+       "names": [
+        "Apple TV"
+       ]
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "id": "761932",
+   "date": "2026-11-02T00:00Z",
+   "competitions": [
+    {
+     "date": "2026-11-02T00:00Z",
+     "status": {
+      "type": {
+       "name": "STATUS_SCHEDULED",
+       "state": "pre",
+       "completed": false,
+       "description": "Scheduled",
+       "shortDetail": "Scheduled"
+      }
+     },
+     "competitors": [
+      {
+       "homeAway": "home",
+       "score": "0",
+       "team": {
+        "id": "189",
+        "displayName": "New England Revolution",
+        "shortDisplayName": "New England",
+        "name": "New England Revolution",
+        "abbreviation": "NE",
+        "color": "022166",
+        "alternateColor": "ce0e2d"
+       }
+      },
+      {
+       "homeAway": "away",
+       "score": "0",
+       "team": {
+        "id": "20232",
+        "displayName": "Inter Miami CF",
+        "shortDisplayName": "Miami",
+        "name": "Inter Miami CF",
+        "abbreviation": "MIA",
+        "color": "231f20",
+        "alternateColor": "f7b5cd"
+       }
+      }
+     ],
+     "venue": {
+      "fullName": "Gillette Stadium"
+     },
+     "broadcasts": [
+      {
+       "names": [
+        "Apple TV"
+       ]
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "id": "761921",
+   "date": "2026-11-02T01:30Z",
+   "competitions": [
+    {
+     "date": "2026-11-02T01:30Z",
+     "status": {
+      "type": {
+       "name": "STATUS_SCHEDULED",
+       "state": "pre",
+       "completed": false,
+       "description": "Scheduled",
+       "shortDetail": "Scheduled"
+      }
+     },
+     "competitors": [
+      {
+       "homeAway": "home",
+       "score": "0",
+       "team": {
+        "id": "18966",
+        "displayName": "LAFC",
+        "shortDisplayName": "LAFC",
+        "name": "LAFC",
+        "abbreviation": "LAFC",
+        "color": "000000",
+        "alternateColor": "c7a36f"
+       }
+      },
+      {
+       "homeAway": "away",
+       "score": "0",
+       "team": {
+        "id": "17362",
+        "displayName": "Minnesota United FC",
+        "shortDisplayName": "Minnesota",
+        "name": "Minnesota United FC",
+        "abbreviation": "MIN",
+        "color": "000000",
+        "alternateColor": "9bcde4"
+       }
+      }
+     ],
+     "venue": {
+      "fullName": "BMO Stadium"
+     },
+     "broadcasts": [
+      {
+       "names": [
+        "Apple TV"
+       ]
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "id": "761933",
+   "date": "2026-11-02T02:45Z",
+   "competitions": [
+    {
+     "date": "2026-11-02T02:45Z",
+     "status": {
+      "type": {
+       "name": "STATUS_SCHEDULED",
+       "state": "pre",
+       "completed": false,
+       "description": "Scheduled",
+       "shortDetail": "Scheduled"
+      }
+     },
+     "competitors": [
+      {
+       "homeAway": "home",
+       "score": "0",
+       "team": {
+        "id": "9723",
+        "displayName": "Portland Timbers",
+        "shortDisplayName": "Portland",
+        "name": "Portland Timbers",
+        "abbreviation": "POR",
+        "color": "2c5234",
+        "alternateColor": "c99700"
+       }
+      },
+      {
+       "homeAway": "away",
+       "score": "0",
+       "team": {
+        "id": "6077",
+        "displayName": "Houston Dynamo FC",
+        "shortDisplayName": "Houston",
+        "name": "Houston Dynamo FC",
+        "abbreviation": "HOU",
+        "color": "ff6b00",
+        "alternateColor": "101820"
+       }
+      }
+     ],
+     "venue": {
+      "fullName": "Providence Park"
+     },
+     "broadcasts": [
+      {
+       "names": [
+        "FS1",
+        "Apple TV",
+        "FOX Deportes"
+       ]
+      }
+     ]
+    }
+   ]
+  }
+ ]
+}
