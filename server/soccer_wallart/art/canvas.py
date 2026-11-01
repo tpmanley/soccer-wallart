@@ -93,10 +93,13 @@ class Canvas:
             return self.d.textlength(s, font=font) / self.s
         return (sum(self.d.textlength(ch, font=font) for ch in s) + spacing * self.s * (len(s) - 1)) / self.s
 
-    def text(self, x, y, s: str, font, fill, anchor="la", spacing: float = 0):
-        """anchor: first char l/m/r horizontal, second char a/m/s/d vertical (PIL anchors)."""
+    def text(self, x, y, s: str, font, fill, anchor="la", spacing: float = 0,
+             stroke: float = 0, stroke_fill="black"):
+        """anchor: first char l/m/r horizontal, second char a/m/s/d vertical (PIL anchors).
+        stroke: outline width in design units (drawn around the glyphs)."""
         if not spacing:
-            self.d.text((x * self.s, y * self.s), s, font=font, fill=C(fill), anchor=anchor)
+            kw = {"stroke_width": self.w(stroke), "stroke_fill": C(stroke_fill)} if stroke else {}
+            self.d.text((x * self.s, y * self.s), s, font=font, fill=C(fill), anchor=anchor, **kw)
             return
         total = self.text_width(s, font, spacing)
         if anchor[0] == "m":

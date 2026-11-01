@@ -78,6 +78,20 @@ The reference look is the vintage soccer posters on AllPosters. Those are copyri
 we generate **original** art in that style and never reuse those images or real club crests.
 Shields are stylized and made up (stripes, sash, hoops and so on) in each club's colors.
 
+Favorite clubs (Minnesota United, Real Madrid, Barcelona, Liverpool, Crystal Palace, PSG)
+get a hand-drawn **look-alike emblem** instead (`art/emblems.py`). Each one borrows the real
+crest's overall shape, colors and one or two key symbols, but stays a simplified retro
+drawing and never copies the crest:
+- Minnesota United: a loon with raised wings and the North Star
+- Real Madrid: a round badge under a crown
+- Barcelona: the cross, stripes and "FCB" band
+- Liverpool: a liver bird, with flames and gates
+- Crystal Palace: an eagle on a ball in front of the glass palace
+- PSG: the Eiffel Tower on a navy disc
+
+This keeps them recognizable at a glance, consistent with the poster style, and safe to
+publish. Every other club still gets a generated shield.
+
 Everything is drawn only in the panel's 6 colors, at 3× resolution, then downsampled and
 snapped to the palette. Flat colors stay crisp with no dithering, and the halftone texture is
 real vector dots. Snapping is hue-aware: blended edge pixels can only become one of the two

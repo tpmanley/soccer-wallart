@@ -190,3 +190,18 @@ def test_relative_cache_dir_resolves_next_to_config(tmp_path):
     p = tmp_path / "config.yaml"
     p.write_text("cache_dir: .cache\n")
     assert load_config(p).cache_dir == str(tmp_path.resolve() / ".cache")
+
+
+# --- club emblems ----------------------------------------------------------------
+from soccer_wallart.art.canvas import Canvas  # noqa: E402
+from soccer_wallart.art.emblems import EMBLEMS  # noqa: E402
+
+
+@pytest.mark.parametrize("team_id", sorted(EMBLEMS))
+def test_emblem_draws_in_its_box(team_id):
+    c = Canvas(3, bg="white")
+    EMBLEMS[team_id](c, 100, 100, 70, 90)
+    ink = np.argwhere(np.asarray(c.img.convert("L")) < 250)  # anything not white
+    (y0, x0), (y1, x1) = ink.min(0) / 3, ink.max(0) / 3
+    # body stays in the box; ornaments may rise above it, flames may sit just outside
+    assert 70 <= x0 and x1 <= 200 and 55 <= y0 and y1 <= 195

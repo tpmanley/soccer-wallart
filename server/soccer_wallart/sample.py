@@ -24,6 +24,8 @@ T = {
     "bet": Team("244", "Real Betis", "Betis", "BET", "288A00", "0A422D"),
     "che": Team("363", "Chelsea", "Chelsea", "CHE", "034694", "ffffff"),
     "tot": Team("367", "Tottenham Hotspur", "Spurs", "TOT", "ffffff", "0B1426"),
+    "cry": Team("384", "Crystal Palace", "Crystal Palace", "CRY", "0202fb", "000000"),
+    "psg": Team("160", "Paris Saint-Germain", "PSG", "PSG", "011F68", "ffffff"),
 }
 
 
@@ -37,6 +39,8 @@ def sample_matches(now: datetime | None = None) -> list[Match]:
         Match("s4", EPL, T["liv"], T["ars"], d(0, 16, 30), venue="Anfield"),
         Match("s5", EPL, T["nfo"], T["mci"], d(6, 17, 30), venue="The City Ground"),
         Match("s6", EPL, T["tot"], T["che"], d(7, 14), venue="Tottenham Hotspur Stadium"),
+        Match("s7", EPL, T["cry"], T["liv"], d(5, 15), venue="Selhurst Park"),
+        Match("s8", UCL, T["psg"], T["bar"], d(2, 20), venue="Parc des Princes"),
     ]
 
 

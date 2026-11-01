@@ -9,6 +9,7 @@ from dataclasses import dataclass
 
 from . import motifs
 from .canvas import Canvas
+from .emblems import EMBLEMS
 
 
 @dataclass
@@ -35,7 +36,12 @@ class Kit:
 
 
 def _shield(c, x, y, kit: Kit, w=70, h=90):
-    motifs.shield(c, x, y, w, h, kit.primary, kit.secondary, kit.abbr, kit.team_id)
+    """A club's look-alike emblem if we have one, otherwise a generated shield."""
+    emblem = EMBLEMS.get(kit.team_id)
+    if emblem:
+        emblem(c, x, y, w, h)
+    else:
+        motifs.shield(c, x, y, w, h, kit.primary, kit.secondary, kit.abbr, kit.team_id)
 
 
 def sunburst(c: Canvas, box, home: Kit, away: Kit):

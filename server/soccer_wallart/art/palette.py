@@ -72,6 +72,8 @@ CLUB_OVERRIDES: dict[str, list[str]] = {
     "103": ["red", "black"],     # AC Milan
     "111": ["black", "white"],   # Juventus
     "124": ["yellow", "black"],  # Dortmund
+    "384": ["red", "blue"],      # Crystal Palace
+    "160": ["blue", "red"],      # Paris Saint-Germain
 }
 
 
