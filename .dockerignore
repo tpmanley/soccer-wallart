@@ -1,4 +1,10 @@
+.git
 **/.venv
 **/.cache
 **/__pycache__
+**/*.pyc
 firmware
+config
+docs
+server/tests
+server/config.yaml

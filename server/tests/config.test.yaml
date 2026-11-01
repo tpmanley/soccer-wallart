@@ -1,0 +1,8 @@
+timezone: America/Chicago
+teams:
+  - name: Minnesota United
+    espn_id: 17362
+    leagues: [usa.1]
+leagues: [eng.1, uefa.champions, esp.1]
+featured_priority: [teams, uefa.champions, eng.1]
+cache_dir: /tmp/soccer-wallart-test-cache

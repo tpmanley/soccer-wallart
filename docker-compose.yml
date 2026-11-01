@@ -1,0 +1,12 @@
+# docker compose up -d --build
+# Put your config.yaml in ./config (copy server/config.example.yaml).
+services:
+  soccer-wallart:
+    build: .
+    image: soccer-wallart:latest
+    container_name: soccer-wallart
+    restart: unless-stopped
+    ports:
+      - "8080:8080"
+    volumes:
+      - ./config:/config

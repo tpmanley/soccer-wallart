@@ -11,6 +11,7 @@ dependencies = [
   "pyyaml>=6",
   "pillow>=10.3",
   "numpy>=1.26",
+  "tzdata",  # zoneinfo data; slim containers may not ship it
 ]
 
 [project.optional-dependencies]

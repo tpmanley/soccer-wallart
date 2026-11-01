@@ -6,3 +6,4 @@ server/config.yaml
 server/gallery/
 firmware/.pio/
 firmware/include/secrets.h
+/config/

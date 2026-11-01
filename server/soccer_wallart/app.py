@@ -46,6 +46,12 @@ def _check_layout(layout: str | None):
         raise HTTPException(400, f"unknown layout; choose from {sorted(LAYOUTS)}")
 
 
+@app.get("/healthz")
+def healthz():
+    """Cheap liveness check (no ESPN call, no rendering) for Docker's HEALTHCHECK."""
+    return {"ok": True, "teams": [t.name for t in _cfg.teams], "leagues": _cfg.leagues}
+
+
 @app.get("/frame.bin")
 def frame_bin(request: Request, battery: int | None = Query(None, ge=0, le=100), layout: str | None = None):
     _check_layout(layout)

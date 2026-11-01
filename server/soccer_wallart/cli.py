@@ -6,7 +6,7 @@ import sys
 from datetime import datetime, timezone
 from pathlib import Path
 
-from .config import load_config
+from .config import ConfigError, load_config
 
 
 def _service(args):
@@ -34,7 +34,7 @@ def cmd_gallery(args):
     from .art.layouts import LAYOUTS
     from .sample import sample_board, sample_matches
     from .service import Service
-    cfg = load_config(args.config)
+    cfg = load_config(args.config, required=False)
     svc = Service(cfg, provider=None)
     out = Path(args.out)
     out.mkdir(parents=True, exist_ok=True)
@@ -51,7 +51,7 @@ def cmd_gallery(args):
 def cmd_find_team(args):
     from .data.cache import JsonCache
     from .data.espn import EspnProvider
-    cfg = load_config(args.config)
+    cfg = load_config(args.config, required=False)
     p = EspnProvider(JsonCache(cfg.cache_dir, cfg.cache_ttl_minutes * 60))
     hits = p.find_team(args.league, args.query)
     if not hits:
@@ -95,7 +95,11 @@ def main(argv=None):
     s.set_defaults(fn=cmd_serve)
 
     args = ap.parse_args(argv)
-    return args.fn(args) or 0
+    try:
+        return args.fn(args) or 0
+    except ConfigError as e:
+        print(f"error: {e}", file=sys.stderr)
+        return 2
 
 
 if __name__ == "__main__":

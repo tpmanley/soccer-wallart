@@ -40,9 +40,33 @@ cp config.example.yaml config.yaml         # pick your teams/leagues
 | `GET /preview.png?scale=2` | The same image as a PNG |
 | `GET /board.json` | What's on the board, for debugging |
 | `GET /gallery` | Every layout rendered from offline sample data |
+| `GET /healthz` | Quick health check (also used by Docker) |
 
-Docker: `docker build -t soccer-wallart . && docker run -p 8080:8080 -v $PWD/server:/config soccer-wallart`
-(the mounted directory must contain `config.yaml`).
+The server refuses to start without a config file, and says where it looked. That way a
+wrong path never quietly gives you a board without your teams.
+
+## Running it with Docker
+
+```sh
+git clone <this repo> soccer-wallart && cd soccer-wallart
+mkdir -p config && cp server/config.example.yaml config/config.yaml   # then edit it
+docker compose up -d --build
+curl http://localhost:8080/healthz      # {"ok": true, "teams": [...], ...}
+```
+
+- `./config` is mounted at `/config` and holds `config.yaml` plus the ESPN cache (`.cache/`). Rebuilding or recreating the container keeps both.
+- The container restarts automatically (`restart: unless-stopped`) and has a health check.
+- To update: `git pull && docker compose up -d --build`.
+- To see logs: `docker compose logs -f`.
+
+### On Proxmox
+
+Use either a VM or an LXC container. For an **LXC** (e.g. Debian 12):
+
+1. Turn on **Options → Features → Nesting**. For an unprivileged container, also turn on **keyctl**. Docker won't start inside an LXC without these. From the Proxmox host shell: `pct set <id> --features nesting=1,keyctl=1`, then restart the container.
+2. In the container, install Docker (`curl -fsSL https://get.docker.com | sh`), then follow the steps above.
+3. Give the container a fixed address (a static IP or a DHCP reservation on your router). The frame's `FRAME_URL` points at it, e.g. `http://192.168.1.20:8080/frame.bin`.
+4. Open `http://<container-ip>:8080/preview.png` in a browser to check the board.
 
 ### How it decides what to show
 - **Featured match**: the first entry in `featured_priority` that has a match in the next `lookahead_days`. `teams` means any of your teams; you can also use a league slug or a team id. A live match beats a later match at the same priority. A finished match stays up, showing the score, for `after_match_minutes`.

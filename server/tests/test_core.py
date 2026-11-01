@@ -167,3 +167,26 @@ def test_letterbox_other_panel_size():
     design = Image.new("RGB", (2400, 1440), (255, 255, 255))
     idx = to_panel(design, 1600, 1200)
     assert idx.shape == (1200, 1600)
+
+
+# --- config loading ------------------------------------------------------------
+from soccer_wallart.config import ConfigError, load_config  # noqa: E402
+
+
+def test_missing_config_is_an_error(tmp_path):
+    with pytest.raises(ConfigError, match="not found"):
+        load_config(tmp_path / "nope.yaml")
+    assert load_config(tmp_path / "nope.yaml", required=False).teams == []
+
+
+def test_bad_timezone_is_an_error(tmp_path):
+    p = tmp_path / "config.yaml"
+    p.write_text("timezone: Mars/Olympus\n")
+    with pytest.raises(ConfigError, match="unknown timezone"):
+        load_config(p)
+
+
+def test_relative_cache_dir_resolves_next_to_config(tmp_path):
+    p = tmp_path / "config.yaml"
+    p.write_text("cache_dir: .cache\n")
+    assert load_config(p).cache_dir == str(tmp_path.resolve() / ".cache")

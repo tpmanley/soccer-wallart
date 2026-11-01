@@ -2,7 +2,7 @@ from __future__ import annotations
 
 import os
 from pathlib import Path
-from zoneinfo import ZoneInfo
+from zoneinfo import ZoneInfo, ZoneInfoNotFoundError
 
 import yaml
 from pydantic import BaseModel, Field, field_validator
@@ -46,8 +46,18 @@ class Config(BaseModel):
     lookahead_days: int = 7
     refresh: RefreshConfig = Field(default_factory=RefreshConfig)
     display: DisplayConfig = Field(default_factory=DisplayConfig)
+    # Relative paths are resolved against the directory containing config.yaml.
     cache_dir: str = ".cache"
     cache_ttl_minutes: int = 60
+
+    @field_validator("timezone")
+    @classmethod
+    def _valid_tz(cls, v: str) -> str:
+        try:
+            ZoneInfo(v)
+        except (ZoneInfoNotFoundError, ValueError) as e:
+            raise ValueError(f"unknown timezone {v!r} (use an IANA name like America/Chicago)") from e
+        return v
 
     @property
     def tz(self) -> ZoneInfo:
@@ -68,9 +78,29 @@ class Config(BaseModel):
         return {t.espn_id: t.colors for t in self.teams if t.colors}
 
 
-def load_config(path: str | os.PathLike | None = None) -> Config:
-    path = Path(path or os.environ.get("SOCCER_WALLART_CONFIG", "config.yaml"))
+class ConfigError(RuntimeError):
+    pass
+
+
+def load_config(path: str | os.PathLike | None = None, required: bool = True) -> Config:
+    """Load config.yaml. Path order: argument, $SOCCER_WALLART_CONFIG, ./config.yaml.
+
+    A missing file is an error unless required=False (used by commands like `gallery`
+    that work fine on defaults) — otherwise a typo in a volume mount would silently
+    give you a board with none of your teams."""
+    path = Path(path or os.environ.get("SOCCER_WALLART_CONFIG", "config.yaml")).expanduser()
     if not path.exists():
+        if required:
+            raise ConfigError(
+                f"config file not found: {path.resolve()} — copy config.example.yaml there "
+                "(in Docker: mount a folder containing config.yaml at /config)")
         return Config()
-    data = yaml.safe_load(path.read_text()) or {}
-    return Config.model_validate(data)
+    try:
+        data = yaml.safe_load(path.read_text()) or {}
+        cfg = Config.model_validate(data)
+    except (yaml.YAMLError, ValueError) as e:
+        raise ConfigError(f"invalid config {path}: {e}") from e
+    cache = Path(cfg.cache_dir).expanduser()
+    if not cache.is_absolute():
+        cfg.cache_dir = str((path.resolve().parent / cache))
+    return cfg
