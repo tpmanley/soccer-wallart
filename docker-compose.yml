@@ -1,5 +1,6 @@
 # docker compose up -d --build
 # Put your config.yaml in ./config (copy server/config.example.yaml).
+# To use a port other than 8080: echo SOCCER_WALLART_PORT=8090 > .env
 services:
   soccer-wallart:
     build: .
@@ -7,6 +8,8 @@ services:
     container_name: soccer-wallart
     restart: unless-stopped
     ports:
-      - "8080:8080"
+      # Host port: set SOCCER_WALLART_PORT in a .env file next to this file
+      # (e.g. SOCCER_WALLART_PORT=8090). Defaults to 8080.
+      - "${SOCCER_WALLART_PORT:-8080}:8080"
     volumes:
       - ./config:/config

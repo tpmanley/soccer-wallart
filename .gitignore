@@ -7,3 +7,4 @@ server/gallery/
 firmware/.pio/
 firmware/include/secrets.h
 /config/
+.env

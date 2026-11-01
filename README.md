@@ -56,6 +56,7 @@ curl http://localhost:8080/healthz      # {"ok": true, "teams": [...], ...}
 
 - `./config` is mounted at `/config` and holds `config.yaml` plus the ESPN cache (`.cache/`). Rebuilding or recreating the container keeps both.
 - The container restarts automatically (`restart: unless-stopped`) and has a health check.
+- To use a different port (if 8080 is taken), create a `.env` file next to `docker-compose.yml` containing e.g. `SOCCER_WALLART_PORT=8090`, then run `docker compose up -d`. Use the same port in the frame's `FRAME_URL`.
 - To update: `git pull && docker compose up -d --build`.
 - To see logs: `docker compose logs -f`.
 
