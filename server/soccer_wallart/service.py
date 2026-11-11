@@ -38,20 +38,26 @@ class Service:
         matches = self.provider.matches(self.cfg.all_leagues(), local_today - timedelta(days=1),
                                         local_today + timedelta(days=self.cfg.lookahead_days + 1))
         board = build_board(matches, self.cfg, now)
-        if board.featured is None:
-            board.featured = self._next_team_fixture(now)
+        if board.featured is None or len(board.upcoming) < self.cfg.list_size:
+            # International breaks and off-seasons leave the lookahead window (nearly) empty.
+            # Fill the gaps with the favourite teams' next fixtures, even if they're weeks away.
+            shown = {m.id for m in ([board.featured] if board.featured else []) + board.upcoming}
+            later = [m for m in self._team_fixtures(now) if m.id not in shown]
+            if board.featured is None and later:
+                board.featured = later.pop(0)
+            board.upcoming += later[: self.cfg.list_size - len(board.upcoming)]
         return board
 
-    def _next_team_fixture(self, now: datetime):
-        """Off-season fallback: feature a favourite team's next fixture even if it's months away."""
-        best = None
+    def _team_fixtures(self, now: datetime) -> list:
+        """The favourite teams' upcoming fixtures from their full schedules, soonest first."""
+        found = {}
         for team in self.cfg.teams:
             for slug in team.leagues:
                 comp_name = style_for(slug).title.title()
                 for m in self.provider.team_schedule(slug, team.espn_id, comp_name):
-                    if m.state == "pre" and m.kickoff > now and (best is None or m.kickoff < best.kickoff):
-                        best = m
-        return best
+                    if m.state == "pre" and m.kickoff > now:
+                        found.setdefault(m.id, m)
+        return sorted(found.values(), key=lambda m: m.kickoff)
 
     def frame(self, now: datetime | None = None, layout: str | None = None, battery: int | None = None) -> Frame:
         now = now or datetime.now(timezone.utc)

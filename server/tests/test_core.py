@@ -205,3 +205,24 @@ def test_emblem_draws_in_its_box(team_id):
     (y0, x0), (y1, x1) = ink.min(0) / 3, ink.max(0) / 3
     # body stays in the box; ornaments may rise above it, flames may sit just outside
     assert 70 <= x0 and x1 <= 200 and 55 <= y0 and y1 <= 195
+
+
+def test_empty_week_fills_next_up_from_team_schedules():
+    """International break: nothing within lookahead_days, so pull the teams' later fixtures."""
+    later = [m for d in (12, 15, 20, 25, 30, 35, 40)
+             for m in sample_matches(NOW + timedelta(days=d)) if m.team_ids & {"17362"}]
+    for i, m in enumerate(later):
+        m.id = f"later{i}"
+
+    class Provider:
+        def matches(self, *a):
+            return []
+
+        def team_schedule(self, *a, **k):
+            return list(reversed(later)) + [later[0]]   # unsorted, with a duplicate
+
+    b = Service(cfg(), provider=Provider()).board(NOW)
+    assert b.featured.id == "later0"
+    ids = [m.id for m in b.upcoming]
+    assert ids == [f"later{i}" for i in range(1, 6)]       # capped at list_size
+    assert len(set(ids)) == len(ids)
