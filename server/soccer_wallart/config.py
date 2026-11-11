@@ -1,5 +1,7 @@
 from __future__ import annotations
 
+from typing import Literal
+
 import os
 from pathlib import Path
 from zoneinfo import ZoneInfo, ZoneInfoNotFoundError
@@ -34,6 +36,7 @@ class DisplayConfig(BaseModel):
     width: int = 800
     height: int = 480
     clock: str = "12h"  # or "24h"
+    rotate: Literal[0, 180] = 0  # 180 if the frame hangs the other way up
 
 
 class Config(BaseModel):

@@ -226,3 +226,19 @@ def test_empty_week_fills_next_up_from_team_schedules():
     ids = [m.id for m in b.upcoming]
     assert ids == [f"later{i}" for i in range(1, 6)]       # capped at list_size
     assert len(set(ids)) == len(ids)
+
+
+def test_rotate_180_flips_only_the_device_buffer():
+    board = sample_board("s1", NOW)
+    up = Service(cfg()).render(board, NOW)
+    c = cfg()
+    c.display.rotate = 180
+    down = Service(c).render(board, NOW)
+    assert down.png == up.png                       # preview stays upright
+    assert down.native != up.native
+    assert down.etag != up.etag                     # frame redraws after the setting changes
+    w = 800 // 2
+    first_row = np.frombuffer(up.native[:w], np.uint8)
+    last_row_flipped = np.frombuffer(down.native[-w:], np.uint8)[::-1]
+    swap = (last_row_flipped >> 4) | ((last_row_flipped & 0xF) << 4)   # pixel order within a byte
+    assert np.array_equal(first_row, swap)

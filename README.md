@@ -59,6 +59,7 @@ curl http://localhost:8080/healthz      # {"ok": true, "teams": [...], ...}
 - To use a different port (if 8080 is taken), create a `.env` file next to `docker-compose.yml` containing e.g. `SOCCER_WALLART_PORT=8090`, then run `docker compose up -d`. Use the same port in the frame's `FRAME_URL`.
 - To update: `git pull && docker compose up -d --build`.
 - To see logs: `docker compose logs -f`.
+- If the image shows upside down on the frame, set `display: rotate: 180` in `config.yaml` and restart (`docker compose restart`). Only the frame's image turns; `/preview.png` stays upright.
 
 ### On Proxmox
 

@@ -6,6 +6,8 @@ import logging
 from dataclasses import dataclass
 from datetime import datetime, timedelta, timezone
 
+import numpy as np
+
 from .art.poster import render_board
 from .competitions import style_for
 from .config import Config
@@ -67,12 +69,13 @@ class Service:
     def render(self, board: Board, now: datetime, layout: str | None = None, battery: int | None = None) -> Frame:
         design = render_board(board, self.cfg, now, layout=layout, battery=battery)
         idx = to_panel(design, self.cfg.display.width, self.cfg.display.height)
-        native = pack_native(idx)
+        # Only the device buffer is rotated; /preview.png stays upright.
+        native = pack_native(np.rot90(idx, 2) if self.cfg.display.rotate == 180 else idx)
         # The ETag hashes the board *content* (plus the local date, since "TODAY"/"TOMORROW" labels
         # change at midnight) rather than the pixels, so the "updated" footer clock alone never
         # forces a slow e-ink refresh.
         sig = repr([(m.id, m.state, m.home_score, m.away_score, m.kickoff) for m in
                     ([board.featured] if board.featured else []) + board.upcoming])
-        sig += f"|{layout}|{battery // 10 if battery is not None else None}|{now.astimezone(self.cfg.tz).date()}"
+        sig += f"|{layout}|{self.cfg.display.rotate}|{battery // 10 if battery is not None else None}|{now.astimezone(self.cfg.tz).date()}"
         etag = hashlib.sha1(sig.encode()).hexdigest()[:16]
         return Frame(board, indices_to_png(idx), native, etag, next_wake_seconds(board, self.cfg, now))

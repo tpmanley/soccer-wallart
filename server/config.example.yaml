@@ -31,6 +31,7 @@ display:
   width: 800
   height: 480
   clock: 12h                 # or 24h
+  rotate: 0                  # 180 if the image shows upside down on the frame
 
 cache_dir: .cache
 cache_ttl_minutes: 60
