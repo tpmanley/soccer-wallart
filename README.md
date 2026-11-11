@@ -92,7 +92,7 @@ Use either a VM or an LXC container. For an **LXC** (e.g. Debian 12):
 - `art/layouts.py` holds three poster layouts: **sunburst**, **diagonal** (team-color split) and **deco** (floodlit stadium). Each match gets one, chosen by a stable hash of the match. Force one with `?layout=`.
 - Team colors come from ESPN, mapped to the panel colors by hue. `CLUB_OVERRIDES` in `art/palette.py` and per-team `colors:` in the config fix clubs whose ESPN colors don't match the kit (for example, Barcelona as blue and red).
 - Named derbies (El Clásico, the North London Derby, …) get a ribbon. Add more in `competitions.py`.
-- Favorite clubs get a hand-drawn look-alike emblem: Minnesota United, Real Madrid, Barcelona, Liverpool, Crystal Palace and PSG so far. To add a club, write a drawing function in `art/emblems.py` and register its ESPN team id in `EMBLEMS`. Every other club gets a generated shield.
+- Favorite clubs get a hand-drawn look-alike emblem: Minnesota United, Real Madrid, Barcelona, Liverpool, Crystal Palace, PSG and the US men's and women's national teams so far (the women's version has four stars above the shield). To add a club, write a drawing function in `art/emblems.py` and register its ESPN team id in `EMBLEMS`. Every other club gets a generated shield.
 - Fonts are bundled under the SIL Open Font License: Arvo, Alfa Slab One, Bebas Neue, Jost.
 
 Data comes from ESPN's public, unofficial site API, with no key needed. Responses are cached
