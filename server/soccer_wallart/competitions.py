@@ -27,8 +27,19 @@ COMPETITIONS: dict[str, CompStyle] = {
     "uefa.europa.conf": CompStyle("CONFERENCE LEAGUE", "UECL", "green"),
     "concacaf.champions": CompStyle("CONCACAF CHAMPIONS CUP", "CCC", "blue"),
     "concacaf.leagues.cup": CompStyle("LEAGUES CUP", "LC", "yellow"),
+    "esp.copa_del_rey": CompStyle("COPA DEL REY", "CDR", "red"),
+    "fra.coupe_de_france": CompStyle("COUPE DE FRANCE", "CDF", "red"),
+    # National teams. ESPN calls both US sides "United States", so the women's
+    # competitions say so in the banner.
     "fifa.world": CompStyle("WORLD CUP", "WC", "red"),
     "fifa.friendly": CompStyle("INTERNATIONAL FRIENDLY", "INTL", "black"),
+    "concacaf.nations.league": CompStyle("NATIONS LEAGUE", "CNL", "blue"),
+    "concacaf.gold": CompStyle("GOLD CUP", "GOLD", "yellow"),
+    "fifa.wwc": CompStyle("WOMEN'S WORLD CUP", "WWC", "red"),
+    "fifa.friendly.w": CompStyle("WOMEN'S FRIENDLY", "INTL", "black"),
+    "concacaf.womens.championship": CompStyle("WOMEN'S CHAMPIONSHIP", "CWC", "blue"),
+    "concacaf.w.gold": CompStyle("WOMEN'S GOLD CUP", "WGC", "yellow"),
+    "fifa.shebelieves": CompStyle("SHEBELIEVES CUP", "SBC", "green"),
 }
 
 
