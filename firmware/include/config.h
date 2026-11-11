@@ -16,6 +16,7 @@
 #define PMIC_SDA_PIN  47
 #define PMIC_SCL_PIN  48
 #define PMIC_ADDR     0x34
+#define PMIC_IRQ_PIN  21      // pulsing it low wakes the AXP2101 from its sleep mode
 
 // --- KEY button: wakes the frame for an immediate refresh (active LOW) ---
 #define KEY_BUTTON_PIN 4
