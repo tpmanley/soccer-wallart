@@ -320,6 +320,47 @@ def minnesota_united(c: Canvas, x, y, w, h):
     _clip(c, shield, "blue", inside)
 
 
+def _usa_shield(c: Canvas, x, y, w, h):
+    """Straight-sided shield: navy chief with USA, red and white vertical stripes below."""
+    b = Box(x, y, w, h)
+    shield = b.pts((0, 0), (1, 0), (1, 0.62), (0.5, 1.0), (0, 0.62))
+    chief = 0.36
+
+    def inside(l: Canvas):
+        n = 7  # red, white, red, … with red on both edges
+        sw = w / n
+        for i in range(0, n, 2):
+            l.rect(x + i * sw, y, x + (i + 1) * sw, y + h, fill="red")
+        l.rect(x, y, x + w, y + h * chief, fill="blue")
+        l.rect(x, y + h * chief, x + w, y + h * chief + max(1.5, h * 0.025), fill="white")
+        _label(l, b.cx, y + h * chief / 2 + 1, "USA", w * 0.74, h * 0.26, "white")
+    _clip(c, shield, "white", inside)
+    return b
+
+
+def usa_men(c: Canvas, x, y, w, h):
+    """US men's national team."""
+    _usa_shield(c, x, y, w, h)
+
+
+def usa_women(c: Canvas, x, y, w, h):
+    """US women's national team: the same shield, with four stars above for the World Cups."""
+    b = _usa_shield(c, x, y, w, h)
+    r = max(4.0, w * 0.115)
+    for i in range(4):
+        sx = b.cx + (i - 1.5) * r * 2.25
+        _star5(c, sx, y - r - 2, r, "yellow", outline=max(1.2, r * 0.28))
+
+
+def _star5(c: Canvas, cx, cy, r, fill, outline=None):
+    pts = []
+    for i in range(10):
+        rr = r if i % 2 == 0 else r * 0.42
+        a = math.radians(-90 + 36 * i)
+        pts.append((cx + rr * math.cos(a), cy + rr * math.sin(a)))
+    c.poly(pts, fill=fill, outline="black", width=outline or max(0.8, r * 0.15))
+
+
 EMBLEMS: dict[str, Callable[..., None]] = {
     "86": real_madrid,
     "83": barcelona,
@@ -327,4 +368,6 @@ EMBLEMS: dict[str, Callable[..., None]] = {
     "384": crystal_palace,
     "160": psg,
     "17362": minnesota_united,
+    "660": usa_men,
+    "2765": usa_women,
 }
