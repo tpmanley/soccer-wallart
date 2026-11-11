@@ -3,6 +3,18 @@
 A color e-ink wall display that shows upcoming soccer matches as a retro, vintage-poster
 style print: one big illustrated poster for the featured match, plus a "NEXT UP" list.
 
+![El Clásico in the sunburst layout, with the Next Up list on the right](docs/images/example-sunburst.png)
+
+Each match gets one of three poster layouts. Here are the other two, **diagonal** and **deco**:
+
+<p>
+  <img src="docs/images/example-diagonal.png" width="49%" alt="PSG vs Barcelona in the diagonal layout, split in team colors">
+  <img src="docs/images/example-deco.png" width="49%" alt="LAFC vs Minnesota United in the deco layout, with a floodlit stadium">
+</p>
+
+These are exact 800×480 renders of what the panel shows, made from the built-in sample
+data (`soccer-wallart gallery`).
+
 ```
 ESPN public API ──► render server (Python) ──► /frame.bin (800×480, 4bpp, 192 KB)
                          │ config.yaml                    ▲
