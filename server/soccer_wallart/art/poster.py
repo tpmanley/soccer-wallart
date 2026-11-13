@@ -50,6 +50,9 @@ class Formatter:
                 return "TOMORROW"
         return t.strftime("%a %-d %b").upper()
 
+    def month_day(self, dt: datetime) -> str:
+        return self.local(dt).strftime("%b %-d").upper()  # "NOV 17"
+
     def weekday(self, dt: datetime) -> str:
         return self.local(dt).strftime("%A").upper()
 
@@ -172,7 +175,7 @@ def draw_list(c: Canvas, matches: list[Match], fmt: Formatter, favorites: set[st
         if m.is_live:
             when, when_ink = f"LIVE {m.status_detail}  ·  {m.home_score}-{m.away_score}", "red"
         else:
-            when, when_ink = f"{fmt.day(m.kickoff)}  ·  {fmt.time(m.kickoff)}", "red"
+            when, when_ink = f"{fmt.month_day(m.kickoff)}  ·  {fmt.time(m.kickoff).replace(' ', '')}", "red"
         when_font = c.condensed(18)
         c.text(text_x, y + 4, when, when_font, when_ink, "la", spacing=0.5)
         # Network right-aligned on the same line, only if it fits beside the date/time.
