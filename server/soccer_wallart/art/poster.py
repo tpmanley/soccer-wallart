@@ -69,7 +69,8 @@ def choose_layout(match: Match) -> str:
 
 
 # ---------------------------------------------------------------------------
-def draw_featured(c: Canvas, m: Match, fmt: Formatter, overrides, layout: str | None):
+def draw_featured(c: Canvas, m: Match, fmt: Formatter, overrides, layout: str | None,
+                  broadcast: str | None = None):
     home, away = _kit(m.home, overrides), _kit(m.away, overrides)
     comp = style_for(m.competition.slug, m.competition.name)
     art_box = (PX0, BANNER_B, PX1, NAMES_T)
@@ -123,8 +124,8 @@ def draw_featured(c: Canvas, m: Match, fmt: Formatter, overrides, layout: str | 
     parts = [fmt.day(m.kickoff, relative=False), f"{fmt.time(m.kickoff)} {fmt.tz_abbr(m.kickoff)}"]
     if m.venue:
         parts.append(m.venue.upper())
-    if m.broadcasts:
-        parts.append(m.broadcasts[0].upper())
+    if broadcast:
+        parts.append(broadcast.upper())
     while True:
         info = "  ·  ".join(parts)
         f, sz = c.fit(info, c.condensed, 19, PX1 - PX0 - 20, min_size=14, spacing=1)
@@ -154,7 +155,7 @@ def draw_empty(c: Canvas, fmt: Formatter):
 
 # ---------------------------------------------------------------------------
 def draw_list(c: Canvas, matches: list[Match], fmt: Formatter, favorites: set[str], updated: datetime,
-              battery: int | None = None):
+              battery: int | None = None, pick_broadcast=lambda bs: bs[0] if bs else None):
     c.rect(LX0, PY0, LX1, BANNER_B, fill="red")
     c.text((LX0 + LX1) / 2, (PY0 + BANNER_B) / 2 + 1, "NEXT UP", c.slab(24), "white", "mm", spacing=3)
     y, row_h = 64, 78
@@ -172,7 +173,14 @@ def draw_list(c: Canvas, matches: list[Match], fmt: Formatter, favorites: set[st
             when, when_ink = f"LIVE {m.status_detail}  ·  {m.home_score}-{m.away_score}", "red"
         else:
             when, when_ink = f"{fmt.day(m.kickoff)}  ·  {fmt.time(m.kickoff)}", "red"
-        c.text(text_x, y + 4, when, c.condensed(18), when_ink, "la", spacing=0.5)
+        when_font = c.condensed(18)
+        c.text(text_x, y + 4, when, when_font, when_ink, "la", spacing=0.5)
+        # Network right-aligned on the same line, only if it fits beside the date/time.
+        if not m.is_live and (b := pick_broadcast(m.broadcasts)):
+            room = maxw - c.text_width(when, when_font, 0.5) - 8
+            bf, bsz = c.fit(b.upper(), c.condensed, 15, room, min_size=12, spacing=0.5)
+            if c.text_width(b.upper(), bf, 0.5) <= room:
+                c.text(LX1, y + 6, b.upper(), bf, "black", "ra", spacing=0.5)
         for j, (prefix, team) in enumerate((("", m.home), ("vs ", m.away))):
             label = team.short_name.upper()
             ink = "blue" if team.id in favorites else "black"
@@ -197,8 +205,10 @@ def render_board(board, cfg, now: datetime | None = None, layout: str | None = N
     fmt = Formatter(cfg.tz, cfg.display.clock, now)
     c = Canvas(scale)
     if board.featured:
-        draw_featured(c, board.featured, fmt, cfg.team_color_overrides(), layout)
+        draw_featured(c, board.featured, fmt, cfg.team_color_overrides(), layout,
+                      cfg.pick_broadcast(board.featured.broadcasts))
     else:
         draw_empty(c, fmt)
-    draw_list(c, board.upcoming, fmt, cfg.team_ids, board.generated_at, battery)
+    draw_list(c, board.upcoming, fmt, cfg.team_ids, board.generated_at, battery,
+              cfg.pick_broadcast)
     return c.img

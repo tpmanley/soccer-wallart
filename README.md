@@ -85,6 +85,7 @@ Use either a VM or an LXC container. For an **LXC** (e.g. Debian 12):
 ### How it decides what to show
 - **Featured match**: the first entry in `featured_priority` that has a match in the next `lookahead_days`. `teams` means any of your teams; you can also use a league slug or a team id. A live match beats a later match at the same priority. A finished match stays up, showing the score, for `after_match_minutes`.
 - **Off-season**: if nothing at all is scheduled this week, it features your team's next fixture, even if that's months away.
+- **Where to watch**: the poster and each NEXT UP row show one network. When a match is on several, it picks the first of your `watch: services` that carries it, in the order you list them. Next come free over-the-air networks (ABC, CBS, NBC, FOX, Telemundo, Univision, UniMás; turn off with `include_free: false`), then whatever ESPN lists first. Names match ESPN's ignoring case, spaces and punctuation, so `paramount plus` matches `Paramount+`.
 - **Refresh timing**: the device wakes at `daily_at`, at every listed kickoff, after each match ends, and every `live_minutes` while a match is live.
 - **ETag**: hashes the board's content, not its pixels, so the frame only flashes when something actually changes.
 

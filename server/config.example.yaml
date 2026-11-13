@@ -17,6 +17,13 @@ leagues: [eng.1, uefa.champions]
 # What gets the big poster, in order. "teams" = any of your teams; or a league slug / team id.
 featured_priority: [teams, uefa.champions, eng.1]
 
+# Which broadcast the poster shows when a match is on several. Your services come first
+# (in this order), then free over-the-air networks (ABC, CBS, NBC, FOX, Telemundo,
+# Univision, UniMás), then whatever ESPN lists first.
+watch:
+  services: [Peacock, Paramount+, Apple TV]
+  include_free: true
+
 list_size: 5          # fixtures in the NEXT UP column
 lookahead_days: 7
 

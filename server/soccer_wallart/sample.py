@@ -35,12 +35,12 @@ def sample_matches(now: datetime | None = None) -> list[Match]:
     return [
         Match("s1", LIGA, T["rma"], T["bar"], d(6, 20), venue="Santiago Bernabéu", broadcasts=["ESPN+"]),
         Match("s2", MLS, T["lafc"], T["min"], d(1, 1, 30), venue="BMO Stadium", broadcasts=["Apple TV"]),
-        Match("s3", UCL, T["dor"], T["bet"], d(3, 20), venue="Signal Iduna Park"),
-        Match("s4", EPL, T["liv"], T["ars"], d(0, 16, 30), venue="Anfield"),
-        Match("s5", EPL, T["nfo"], T["mci"], d(6, 17, 30), venue="The City Ground"),
+        Match("s3", UCL, T["dor"], T["bet"], d(3, 20), venue="Signal Iduna Park", broadcasts=["CBS Sports Network", "Paramount+"]),
+        Match("s4", EPL, T["liv"], T["ars"], d(0, 16, 30), venue="Anfield", broadcasts=["USA Net", "Peacock"]),
+        Match("s5", EPL, T["nfo"], T["mci"], d(6, 17, 30), venue="The City Ground", broadcasts=["NBC"]),
         Match("s6", EPL, T["tot"], T["che"], d(7, 14), venue="Tottenham Hotspur Stadium"),
         Match("s7", EPL, T["cry"], T["liv"], d(5, 15), venue="Selhurst Park"),
-        Match("s8", UCL, T["psg"], T["bar"], d(2, 20), venue="Parc des Princes"),
+        Match("s8", UCL, T["psg"], T["bar"], d(2, 20), venue="Parc des Princes", broadcasts=["Paramount+"]),
     ]
 
 

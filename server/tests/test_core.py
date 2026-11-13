@@ -52,6 +52,17 @@ def test_parse_scoreboard_ucl_broadcasts():
     assert any("Paramount+" in m.broadcasts for m in ms)
 
 
+def test_pick_broadcast_prefers_my_services():
+    c = cfg(watch={"services": ["Peacock", "paramount plus"]})
+    assert c.pick_broadcast(["ESPN+", "Paramount+", "Peacock"]) == "Peacock"
+    assert c.pick_broadcast(["ESPN+", "Paramount+"]) == "Paramount+"
+    assert c.pick_broadcast(["FS1", "FOX"]) == "FOX"          # free OTA beats one I don't have
+    assert c.pick_broadcast(["FS1", "ESPN+"]) == "FS1"        # nothing matches: ESPN's order
+    assert c.pick_broadcast([]) is None
+    no_free = cfg(watch={"services": [], "include_free": False})
+    assert no_free.pick_broadcast(["FS1", "FOX"]) == "FS1"
+
+
 def test_parse_team_schedule_object_scores():
     data = {"events": [{
         "id": "1", "date": "2026-03-15T20:30Z",

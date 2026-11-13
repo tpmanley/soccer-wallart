@@ -74,7 +74,8 @@ class Service:
         # The ETag hashes the board *content* (plus the local date, since "TODAY"/"TOMORROW" labels
         # change at midnight) rather than the pixels, so the "updated" footer clock alone never
         # forces a slow e-ink refresh.
-        sig = repr([(m.id, m.state, m.home_score, m.away_score, m.kickoff) for m in
+        sig = repr([(m.id, m.state, m.home_score, m.away_score, m.kickoff,
+                     self.cfg.pick_broadcast(m.broadcasts)) for m in
                     ([board.featured] if board.featured else []) + board.upcoming])
         sig += f"|{layout}|{self.cfg.display.rotate}|{battery // 10 if battery is not None else None}|{now.astimezone(self.cfg.tz).date()}"
         etag = hashlib.sha1(sig.encode()).hexdigest()[:16]

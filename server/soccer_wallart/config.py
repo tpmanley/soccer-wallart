@@ -3,6 +3,7 @@ from __future__ import annotations
 from typing import Literal
 
 import os
+import re
 from pathlib import Path
 from zoneinfo import ZoneInfo, ZoneInfoNotFoundError
 
@@ -39,6 +40,23 @@ class DisplayConfig(BaseModel):
     rotate: Literal[0, 180] = 0  # 180 if the frame hangs the other way up
 
 
+# US over-the-air networks: free with an antenna, so they count as "available" by default.
+FREE_NETWORKS = ["ABC", "CBS", "NBC", "FOX", "Telemundo", "Univision", "UniMás"]
+
+
+def _norm(name: str) -> str:
+    """'Paramount+' == 'paramount plus', 'Apple TV' == 'AppleTV'."""
+    return re.sub(r"[^a-z0-9]", "", name.lower().replace("+", "plus"))
+
+
+class WatchConfig(BaseModel):
+    # Services you have, most preferred first, e.g. [Peacock, Apple TV, Paramount+].
+    # Matched against ESPN's broadcast names ignoring case, spaces and punctuation.
+    services: list[str] = Field(default_factory=list)
+    # Also treat free over-the-air networks (FREE_NETWORKS) as available, after `services`.
+    include_free: bool = True
+
+
 class Config(BaseModel):
     timezone: str = "America/Chicago"
     teams: list[TeamConfig] = Field(default_factory=list)
@@ -49,6 +67,7 @@ class Config(BaseModel):
     lookahead_days: int = 7
     refresh: RefreshConfig = Field(default_factory=RefreshConfig)
     display: DisplayConfig = Field(default_factory=DisplayConfig)
+    watch: WatchConfig = Field(default_factory=WatchConfig)
     # Relative paths are resolved against the directory containing config.yaml.
     cache_dir: str = ".cache"
     cache_ttl_minutes: int = 60
@@ -76,6 +95,16 @@ class Config(BaseModel):
             if slug not in seen:
                 seen.append(slug)
         return seen
+
+    def pick_broadcast(self, broadcasts: list[str]) -> str | None:
+        """The broadcast to show: your first-listed service carrying it, else a free network,
+        else whatever ESPN lists first."""
+        prefs = [*self.watch.services, *(FREE_NETWORKS if self.watch.include_free else [])]
+        by_name = {_norm(b): b for b in reversed(broadcasts)}
+        for p in prefs:
+            if (hit := by_name.get(_norm(p))) is not None:
+                return hit
+        return broadcasts[0] if broadcasts else None
 
     def team_color_overrides(self) -> dict[str, list[str]]:
         return {t.espn_id: t.colors for t in self.teams if t.colors}
