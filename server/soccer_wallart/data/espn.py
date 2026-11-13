@@ -61,9 +61,11 @@ def _event_to_match(ev: dict, comp: Competition, colors=None) -> Match | None:
         return None
     status = (c.get("status") or ev.get("status") or {}).get("type", {})
     state = status.get("state", "pre")
+    # Scoreboards give {"names": [...]}; team schedules give one {"media": {"shortName"}} each.
     broadcasts: list[str] = []
     for b in c.get("broadcasts", []) or []:
-        broadcasts.extend(b.get("names", []))
+        names = b.get("names") or [(b.get("media") or {}).get("shortName")]
+        broadcasts.extend(n for n in names if n and n not in broadcasts)
     return Match(
         id=str(ev["id"]),
         competition=comp,

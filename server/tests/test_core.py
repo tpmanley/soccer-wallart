@@ -52,6 +52,22 @@ def test_parse_scoreboard_ucl_broadcasts():
     assert any("Paramount+" in m.broadcasts for m in ms)
 
 
+def test_parse_team_schedule_broadcasts():
+    data = {"events": [{
+        "id": "1", "date": "2026-11-22T13:00Z",
+        "competitions": [{"date": "2026-11-22T13:00Z",
+                          "status": {"type": {"state": "pre"}},
+                          "broadcasts": [
+                              {"type": {"shortName": "TV"}, "media": {"shortName": "ESPN Deportes"}},
+                              {"type": {"shortName": "STREAMING"}, "media": {"shortName": "ESPN+"}}],
+                          "competitors": [
+                              {"homeAway": "home", "team": {"id": "83", "displayName": "Barcelona"}},
+                              {"homeAway": "away", "team": {"id": "102", "displayName": "Villarreal"}}]}],
+    }]}
+    (m,) = parse_team_schedule(data, "esp.1")
+    assert m.broadcasts == ["ESPN Deportes", "ESPN+"]
+
+
 def test_pick_broadcast_prefers_my_services():
     c = cfg(watch={"services": ["Peacock", "paramount plus"]})
     assert c.pick_broadcast(["ESPN+", "Paramount+", "Peacock"]) == "Peacock"
