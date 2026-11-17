@@ -28,6 +28,7 @@ def cfg(**kw):
         leagues=["eng.1", "uefa.champions", "esp.1"],
         featured_priority=["teams", "uefa.champions", "eng.1"],
         cache_dir="/tmp/soccer-wallart-test-cache",
+        watch={"livesoccertv": False},   # tests never touch the network
     )
     base.update(kw)
     return Config(**base)

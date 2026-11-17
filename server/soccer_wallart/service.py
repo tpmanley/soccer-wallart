@@ -13,6 +13,7 @@ from .competitions import style_for
 from .config import Config
 from .data.cache import JsonCache
 from .data.espn import EspnProvider
+from .data.livesoccertv import LiveSoccerTV
 from .render import indices_to_png, pack_native, to_panel
 from .selection import Board, build_board, next_wake_seconds
 
@@ -29,9 +30,14 @@ class Frame:
 
 
 class Service:
-    def __init__(self, cfg: Config, provider: EspnProvider | None = None):
+    def __init__(self, cfg: Config, provider: EspnProvider | None = None,
+                 listings: LiveSoccerTV | None = None):
         self.cfg = cfg
-        self.provider = provider or EspnProvider(JsonCache(cfg.cache_dir, cfg.cache_ttl_minutes * 60))
+        cache = JsonCache(cfg.cache_dir, cfg.cache_ttl_minutes * 60)
+        self.provider = provider or EspnProvider(cache)
+        if listings is None and cfg.watch.livesoccertv:
+            listings = LiveSoccerTV(cache, cfg.watch.country)
+        self.listings = listings
 
     def board(self, now: datetime | None = None) -> Board:
         now = now or datetime.now(timezone.utc)
@@ -48,6 +54,8 @@ class Service:
             if board.featured is None and later:
                 board.featured = later.pop(0)
             board.upcoming += later[: self.cfg.list_size - len(board.upcoming)]
+        if self.listings:
+            self.listings.fill(([board.featured] if board.featured else []) + board.upcoming)
         return board
 
     def _team_fixtures(self, now: datetime) -> list:

@@ -55,6 +55,11 @@ class WatchConfig(BaseModel):
     services: list[str] = Field(default_factory=list)
     # Also treat free over-the-air networks (FREE_NETWORKS) as available, after `services`.
     include_free: bool = True
+    # When ESPN lists no broadcaster for a match (it never does for the Premier League),
+    # look the match up on livesoccertv.com instead.
+    livesoccertv: bool = True
+    # Whose channels to read from LiveSoccerTV, as the site names the country.
+    country: str = "USA"
 
 
 class Config(BaseModel):

@@ -23,6 +23,10 @@ featured_priority: [teams, uefa.champions, eng.1]
 watch:
   services: [Peacock, Paramount+, Apple TV]
   include_free: true
+  # ESPN lists no US broadcasters for some competitions (the Premier League among them).
+  # For those matches, look up the channels on livesoccertv.com for this country.
+  livesoccertv: true
+  country: USA
 
 list_size: 5          # fixtures in the NEXT UP column
 lookahead_days: 7
