@@ -8,6 +8,7 @@ Endpoints used:
 from __future__ import annotations
 
 import logging
+import platform
 from datetime import date, datetime, timedelta, timezone
 from typing import Any, Iterable
 
@@ -112,7 +113,7 @@ def parse_teams(data: dict) -> list[dict]:
 class EspnProvider:
     def __init__(self, cache: JsonCache, client: httpx.Client | None = None):
         self.cache = cache
-        self.client = client or httpx.Client(timeout=15, headers={"User-Agent": "soccer-wallart/0.1"})
+        self.client = client or httpx.Client(timeout=15, headers={"User-Agent": f"python/{platform.python_version()}"})
 
     def _get(self, url: str, params: dict | None = None, ttl_key: str | None = None) -> dict | None:
         key = ttl_key or (url + "?" + "&".join(f"{k}={v}" for k, v in sorted((params or {}).items())))
