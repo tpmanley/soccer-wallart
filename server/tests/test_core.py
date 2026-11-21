@@ -2,6 +2,7 @@ import json
 from datetime import datetime, timedelta, timezone
 from pathlib import Path
 
+import httpx
 import numpy as np
 import pytest
 from PIL import Image
@@ -11,7 +12,7 @@ from soccer_wallart.config import Config, TeamConfig
 from soccer_wallart.data.espn import parse_scoreboard, parse_team_schedule
 from soccer_wallart.render import pack_native, snap, to_panel
 from soccer_wallart.sample import sample_board, sample_matches
-from soccer_wallart.selection import build_board, next_wake_seconds
+from soccer_wallart.selection import Board, build_board, next_wake_seconds
 from soccer_wallart.service import Service
 
 FIX = Path(__file__).parent / "fixtures"
@@ -122,13 +123,63 @@ def test_finished_matches_drop_off_after_window():
     assert all(m.kickoff + timedelta(minutes=150) >= later for m in [b.featured, *b.upcoming])
 
 
-def test_next_wake_is_clamped_and_hits_kickoff():
+def test_next_wake_is_clamped_and_hits_halftime():
     c = cfg()
     b = build_board(sample_matches(NOW), c, NOW)
     secs = next_wake_seconds(b, c, NOW)
     first_kick = min(m.kickoff for m in [b.featured, *b.upcoming])
-    assert secs == int((first_kick - NOW).total_seconds())
+    assert secs == int((first_kick + timedelta(minutes=55) - NOW).total_seconds())
     assert 15 * 60 <= secs <= 12 * 3600
+
+
+def _one_match_board(state, kickoff, now):
+    m = sample_matches(NOW)[3]  # Liverpool v Arsenal
+    m.state, m.kickoff = state, kickoff
+    return Board(featured=m, upcoming=[], generated_at=now)
+
+
+def test_game_day_wakes_at_halftime_then_full_time():
+    c = cfg()
+    kick = NOW + timedelta(hours=4)  # 10:00 AM Chicago, after the 6:00 daily wake
+    # Before kickoff: no wake at kickoff itself, the first one is halftime.
+    b = _one_match_board("pre", kick, kick - timedelta(hours=2))
+    assert next_wake_seconds(b, c, kick - timedelta(hours=2)) == (2 * 60 + 55) * 60
+    # At halftime (even if ESPN still says "pre"): next is full time.
+    for state in ("in", "pre"):
+        t = kick + timedelta(minutes=55)
+        assert next_wake_seconds(_one_match_board(state, kick, t), c, t) == 60 * 60
+    # Woke a minute early for halftime: still goes to full time, not a 15-minute nap.
+    t = kick + timedelta(minutes=54)
+    assert next_wake_seconds(_one_match_board("in", kick, t), c, t) == 61 * 60
+    # Still going at full time: check again in live_minutes.
+    t = kick + timedelta(minutes=115)
+    assert next_wake_seconds(_one_match_board("in", kick, t), c, t) == 15 * 60
+
+
+def test_today_scoreboards_use_short_cache(tmp_path):
+    from datetime import date
+    from soccer_wallart.data.cache import JsonCache
+    from soccer_wallart.data.espn import LIVE_TTL_SECONDS, EspnProvider
+
+    class Client:
+        def __init__(self):
+            self.urls = []
+
+        def get(self, url, params=None):
+            self.urls.append(params["dates"])
+            return httpx.Response(200, json={"events": []}, request=httpx.Request("GET", url))
+
+    client = Client()
+    p = EspnProvider(JsonCache(tmp_path, 3600), client=client)
+    today, far = date.today(), date.today() + timedelta(days=5)
+    p.scoreboard("eng.1", today), p.scoreboard("eng.1", far)
+    import os, time
+    old = time.time() - LIVE_TTL_SECONDS - 10
+    for f in tmp_path.glob("*.json"):
+        os.utime(f, (old, old))
+    p.scoreboard("eng.1", today), p.scoreboard("eng.1", far)
+    assert client.urls.count(today.strftime("%Y%m%d")) == 2  # refetched
+    assert client.urls.count(far.strftime("%Y%m%d")) == 1    # still cached
 
 
 # --- palette / rendering ------------------------------------------------------

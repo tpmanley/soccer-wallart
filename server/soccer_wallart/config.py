@@ -27,8 +27,13 @@ class TeamConfig(BaseModel):
 
 class RefreshConfig(BaseModel):
     daily_at: str = "06:00"
+    # How long a finished match stays featured, showing the result.
     after_match_minutes: int = 150
-    live_minutes: int = 30
+    # Wakes during a match, in minutes after kickoff: one for the halftime score, one for the result.
+    halftime_minutes: int = 55
+    fulltime_minutes: int = 115
+    # If a match is still going at the full-time wake (stoppage time, a delay), check this often.
+    live_minutes: int = 15
     min_minutes: int = 15
     max_hours: float = 12
 

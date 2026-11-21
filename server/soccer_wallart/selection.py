@@ -8,6 +8,9 @@ from .config import Config
 from .data.models import Match
 
 
+WAKE_GRACE_MINUTES = 5
+
+
 @dataclass
 class Board:
     featured: Match | None
@@ -67,14 +70,19 @@ def next_wake_seconds(board: Board, cfg: Config, now: datetime) -> int:
 
     matches = ([board.featured] if board.featured else []) + board.upcoming
     for m in matches:
-        if m.is_live:
+        if m.is_finished:
+            continue
+        halftime = m.kickoff + timedelta(minutes=r.halftime_minutes)
+        fulltime = m.kickoff + timedelta(minutes=r.fulltime_minutes)
+        candidates += [halftime, fulltime]
+        # ESPN can still say "pre" a little after kickoff, so go by the clock as well as the state.
+        if now >= fulltime and (m.is_live or m.kickoff <= now):
             candidates.append(now + timedelta(minutes=r.live_minutes))
-        elif m.state == "pre":
-            # Wake at kickoff (shows LIVE) and again once it's over (shows the result).
-            candidates += [m.kickoff, m.kickoff + timedelta(minutes=r.after_match_minutes)]
-        elif m.is_finished:
-            candidates.append(m.kickoff + timedelta(minutes=r.after_match_minutes))
-    future = [c for c in candidates if c > now]
+    # The frame's clock drifts, so it can wake a minute or two before the time it was given.
+    # A wake that's that close counts as reached; otherwise it would sleep the 15-minute
+    # minimum and miss halftime.
+    soon = now + timedelta(minutes=WAKE_GRACE_MINUTES)
+    future = [c for c in candidates if c > soon]
     wake = min(future) if future else daily
     secs = int((wake - now).total_seconds())
     return max(r.min_minutes * 60, min(secs, int(r.max_hours * 3600)))

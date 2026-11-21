@@ -110,14 +110,20 @@ def parse_teams(data: dict) -> list[dict]:
         return []
 
 
+# Scoreboards for days around today are re-fetched after this long, so a wake at halftime or
+# full time sees the current score rather than one from up to cache_ttl_minutes ago.
+LIVE_TTL_SECONDS = 120
+
+
 class EspnProvider:
     def __init__(self, cache: JsonCache, client: httpx.Client | None = None):
         self.cache = cache
         self.client = client or httpx.Client(timeout=15, headers={"User-Agent": f"python/{platform.python_version()}"})
 
-    def _get(self, url: str, params: dict | None = None, ttl_key: str | None = None) -> dict | None:
+    def _get(self, url: str, params: dict | None = None, ttl_key: str | None = None,
+             max_age: float | None = None) -> dict | None:
         key = ttl_key or (url + "?" + "&".join(f"{k}={v}" for k, v in sorted((params or {}).items())))
-        cached = self.cache.get(key)
+        cached = self.cache.get(key, max_age=max_age)
         if cached is not None:
             return cached
         try:
@@ -131,7 +137,10 @@ class EspnProvider:
         return data
 
     def scoreboard(self, slug: str, day: date) -> list[Match]:
-        data = self._get(f"{BASE}/{slug}/scoreboard", {"dates": day.strftime("%Y%m%d")})
+        # ESPN's days are US-centric and the server may run in UTC, so "around today" is ±1 day.
+        live = abs((day - date.today()).days) <= 1
+        data = self._get(f"{BASE}/{slug}/scoreboard", {"dates": day.strftime("%Y%m%d")},
+                         max_age=LIVE_TTL_SECONDS if live else None)
         return parse_scoreboard(data, slug) if data else []
 
     def matches(self, slugs: Iterable[str], start: date, end: date) -> list[Match]:

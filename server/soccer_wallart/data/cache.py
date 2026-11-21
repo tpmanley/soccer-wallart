@@ -18,11 +18,11 @@ class JsonCache:
     def _path(self, key: str) -> Path:
         return self.dir / (hashlib.sha1(key.encode()).hexdigest() + ".json")
 
-    def get(self, key: str, allow_stale: bool = False) -> Any | None:
+    def get(self, key: str, allow_stale: bool = False, max_age: float | None = None) -> Any | None:
         p = self._path(key)
         if not p.exists():
             return None
-        if not allow_stale and time.time() - p.stat().st_mtime > self.ttl:
+        if not allow_stale and time.time() - p.stat().st_mtime > (self.ttl if max_age is None else max_age):
             return None
         try:
             return json.loads(p.read_text())

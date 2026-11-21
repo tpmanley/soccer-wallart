@@ -33,8 +33,10 @@ lookahead_days: 7
 
 refresh:
   daily_at: "06:00"          # always refresh at this local time
-  after_match_minutes: 150   # refresh this long after kickoff (shows the result)
-  live_minutes: 30           # refresh cadence while a match is live
+  halftime_minutes: 55       # wake this long after kickoff (halftime score)
+  fulltime_minutes: 115      # and this long after kickoff (final score)
+  live_minutes: 15           # if it's still going at the full-time wake, check this often
+  after_match_minutes: 150   # how long a finished match stays featured
   min_minutes: 15
   max_hours: 12
 
