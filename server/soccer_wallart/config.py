@@ -27,8 +27,17 @@ class TeamConfig(BaseModel):
 
 class RefreshConfig(BaseModel):
     daily_at: str = "06:00"
-    # How long a finished match stays featured, showing the result.
+    # How long a finished match stays featured, showing the result:
+    #   next_match_day  until the daily_at refresh on the day of the next match on the board, or
+    #                   hold_before_kickoff_hours before that kickoff if that is earlier; never
+    #                   shorter than after_match_minutes, never longer than result_hold_max_hours
+    #   fixed           for after_match_minutes after kickoff (the original behaviour)
+    result_hold: Literal["next_match_day", "fixed"] = "next_match_day"
     after_match_minutes: int = 150
+    hold_before_kickoff_hours: float = 0.5
+    # Cap when nothing is coming up soon. The hold then ends at the last daily_at refresh inside
+    # the cap, so it costs no extra wake.
+    result_hold_max_hours: float = 48
     # Wakes during a match, in minutes after kickoff: one for the halftime score, one for the result.
     halftime_minutes: int = 55
     fulltime_minutes: int = 115
@@ -78,6 +87,8 @@ class Config(BaseModel):
     featured_priority: list[str] = Field(default_factory=lambda: ["teams"])
     list_size: int = 5
     lookahead_days: int = 7
+    # LAST strip: each team's most recent result from up to this many days ago (0 = off).
+    recent_days: int = 14
     refresh: RefreshConfig = Field(default_factory=RefreshConfig)
     display: DisplayConfig = Field(default_factory=DisplayConfig)
     watch: WatchConfig = Field(default_factory=WatchConfig)

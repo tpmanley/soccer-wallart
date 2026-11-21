@@ -4,6 +4,7 @@ Endpoints used:
   /apis/site/v2/sports/soccer/{league}/scoreboard?dates=YYYYMMDD   (one day per call; ranges 400)
   /apis/site/v2/sports/soccer/{league}/teams                        (team colors / id lookup)
   /apis/site/v2/sports/soccer/{league}/teams/{id}/schedule?fixture=true  (far-future fallback)
+  /apis/site/v2/sports/soccer/{league}/teams/{id}/schedule          (this season's results, newest first)
 """
 from __future__ import annotations
 
@@ -67,6 +68,9 @@ def _event_to_match(ev: dict, comp: Competition, colors=None) -> Match | None:
     for b in c.get("broadcasts", []) or []:
         names = b.get("names") or [(b.get("media") or {}).get("shortName")]
         broadcasts.extend(n for n in names if n and n not in broadcasts)
+    winner = None
+    if state == "post":
+        winner = next((side for side, x in (("home", home), ("away", away)) if x.get("winner") is True), None)
     return Match(
         id=str(ev["id"]),
         competition=comp,
@@ -79,6 +83,8 @@ def _event_to_match(ev: dict, comp: Competition, colors=None) -> Match | None:
         away_score=_score(away.get("score")) if state != "pre" else None,
         venue=(c.get("venue") or {}).get("fullName"),
         broadcasts=broadcasts,
+        winner=winner,
+        completed=not (state == "post" and status.get("completed") is False),
     )
 
 
@@ -163,6 +169,14 @@ class EspnProvider:
         if not data:
             return []
         return parse_team_schedule(data, slug, self.team_colors(slug), comp_name)
+
+    def team_results(self, slug: str, team_id: str, comp_name: str | None = None) -> list[Match]:
+        """The team's finished games this season in one competition (no `fixture` flag)."""
+        data = self._get(f"{BASE}/{slug}/teams/{team_id}/schedule")
+        if not data:
+            return []
+        return [m for m in parse_team_schedule(data, slug, self.team_colors(slug), comp_name)
+                if m.is_finished]
 
     def find_team(self, slug: str, query: str) -> list[dict]:
         q = query.lower()

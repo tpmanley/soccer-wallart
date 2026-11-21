@@ -1,0 +1,154 @@
+{
+ "events": [
+  {
+   "id": "761945",
+   "date": "2026-11-08T00:00Z",
+   "competitions": [
+    {
+     "date": "2026-11-08T00:00Z",
+     "status": {
+      "type": {
+       "name": "STATUS_FULL_TIME",
+       "state": "post",
+       "completed": true,
+       "shortDetail": "FT"
+      }
+     },
+     "venue": {
+      "fullName": "Allianz Field"
+     },
+     "competitors": [
+      {
+       "homeAway": "home",
+       "winner": true,
+       "score": {
+        "value": 3.0,
+        "displayValue": "3"
+       },
+       "team": {
+        "id": "17362",
+        "abbreviation": "MIN",
+        "displayName": "Minnesota United FC",
+        "shortDisplayName": "Minnesota"
+       }
+      },
+      {
+       "homeAway": "away",
+       "winner": false,
+       "score": {
+        "value": 1.0,
+        "displayValue": "1"
+       },
+       "team": {
+        "id": "191",
+        "abbreviation": "SJ",
+        "displayName": "San Jose Earthquakes",
+        "shortDisplayName": "San Jose"
+       }
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "id": "761921",
+   "date": "2026-11-02T01:30Z",
+   "competitions": [
+    {
+     "date": "2026-11-02T01:30Z",
+     "status": {
+      "type": {
+       "name": "STATUS_FULL_TIME",
+       "state": "post",
+       "completed": true,
+       "shortDetail": "FT"
+      }
+     },
+     "venue": {
+      "fullName": "BMO Stadium"
+     },
+     "competitors": [
+      {
+       "homeAway": "home",
+       "winner": false,
+       "score": {
+        "value": 1.0,
+        "displayValue": "1"
+       },
+       "team": {
+        "id": "18966",
+        "abbreviation": "LAFC",
+        "displayName": "LAFC",
+        "shortDisplayName": "LAFC"
+       }
+      },
+      {
+       "homeAway": "away",
+       "winner": true,
+       "score": {
+        "value": 3.0,
+        "displayValue": "3"
+       },
+       "team": {
+        "id": "17362",
+        "abbreviation": "MIN",
+        "displayName": "Minnesota United FC",
+        "shortDisplayName": "Minnesota"
+       }
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "id": "761913",
+   "date": "2026-10-29T00:30Z",
+   "competitions": [
+    {
+     "date": "2026-10-29T00:30Z",
+     "status": {
+      "type": {
+       "name": "STATUS_FULL_TIME",
+       "state": "post",
+       "completed": true,
+       "shortDetail": "FT"
+      }
+     },
+     "venue": {
+      "fullName": "Allianz Field"
+     },
+     "competitors": [
+      {
+       "homeAway": "home",
+       "winner": true,
+       "score": {
+        "value": 3.0,
+        "displayValue": "3"
+       },
+       "team": {
+        "id": "17362",
+        "abbreviation": "MIN",
+        "displayName": "Minnesota United FC",
+        "shortDisplayName": "Minnesota"
+       }
+      },
+      {
+       "homeAway": "away",
+       "winner": false,
+       "score": {
+        "value": 1.0,
+        "displayValue": "1"
+       },
+       "team": {
+        "id": "186",
+        "abbreviation": "SKC",
+        "displayName": "Sporting Kansas City",
+        "shortDisplayName": "Kansas City"
+       }
+      }
+     ]
+    }
+   ]
+  }
+ ]
+}

@@ -92,6 +92,9 @@ def board_json():
             "venue": x.venue,
         }
     return {"featured": m(f.board.featured), "upcoming": [m(x) for x in f.board.upcoming],
+            "mode": f.board.mode, "results": [m(x) for x in f.board.results],
+            "recent": [m(x) for x in f.board.recent],
+            "hold_until": f.board.hold_until.isoformat() if f.board.hold_until else None,
             "etag": f.etag, "sleep_seconds": f.sleep_seconds}
 
 

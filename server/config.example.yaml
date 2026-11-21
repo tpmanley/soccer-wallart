@@ -28,15 +28,26 @@ watch:
   livesoccertv: true
   country: USA
 
-list_size: 5          # fixtures in the NEXT UP column
+list_size: 5          # rows in the right-hand column
 lookahead_days: 7
+# The column shows today's games and results while there are any (06:00 to 06:00), and
+# NEXT UP otherwise. Under NEXT UP, LAST RESULT rows show each of your teams' latest result
+# from up to this many days ago (0 turns them off). One takes a NEXT UP row; two or three take two.
+recent_days: 14
 
 refresh:
   daily_at: "06:00"          # always refresh at this local time
   halftime_minutes: 55       # wake this long after kickoff (halftime score)
   fulltime_minutes: 115      # and this long after kickoff (final score)
   live_minutes: 15           # if it's still going at the full-time wake, check this often
-  after_match_minutes: 150   # how long a finished match stays featured
+  # How long a finished match stays on the poster with its score:
+  #   next_match_day: until the daily_at refresh on the day of the next match on the board,
+  #                   or hold_before_kickoff_hours before that kickoff if that is earlier
+  #   fixed:          after_match_minutes after kickoff, then it drops off (the old behaviour)
+  result_hold: next_match_day
+  after_match_minutes: 150   # fixed: the whole hold; next_match_day: the shortest hold
+  hold_before_kickoff_hours: 0.5
+  result_hold_max_hours: 48  # longest hold; ends at the last daily_at refresh inside it
   min_minutes: 15
   max_hours: 12
 

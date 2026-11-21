@@ -14,6 +14,9 @@ class FakeProvider:
     def team_schedule(self, *a, **k):
         return []
 
+    def team_results(self, *a, **k):
+        return []
+
 
 @pytest.fixture
 def client(monkeypatch):

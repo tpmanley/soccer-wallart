@@ -26,6 +26,7 @@ T = {
     "tot": Team("367", "Tottenham Hotspur", "Spurs", "TOT", "ffffff", "0B1426"),
     "cry": Team("384", "Crystal Palace", "Crystal Palace", "CRY", "0202fb", "000000"),
     "psg": Team("160", "Paris Saint-Germain", "PSG", "PSG", "011F68", "ffffff"),
+    "stl": Team("21812", "St. Louis CITY SC", "St. Louis", "STL", "ec1458", "001544"),
 }
 
 
@@ -44,8 +45,21 @@ def sample_matches(now: datetime | None = None) -> list[Match]:
     ]
 
 
-def sample_board(featured_id: str = "s1", now: datetime | None = None) -> Board:
+def sample_recent(now: datetime | None = None) -> list[Match]:
+    """A favourite team's last result, for the LAST strip."""
+    now = now or datetime(2026, 11, 1, 12, 0, tzinfo=timezone.utc)
+    kick = (now - timedelta(days=8)).replace(hour=0, minute=30, second=0, microsecond=0)
+    return [Match("r1", MLS, T["min"], T["stl"], kick, state="post", status_detail="FT",
+                  home_score=2, away_score=1, venue="Allianz Field")]
+
+
+def sample_board(featured_id: str = "s1", now: datetime | None = None, recent: bool = True) -> Board:
+    """recent=False leaves out the LAST strip, for a board with five NEXT UP rows."""
+    from .art.poster import list_layout
     now = now or datetime(2026, 11, 1, 12, 0, tzinfo=timezone.utc)
     ms = sorted(sample_matches(now), key=lambda m: m.kickoff)
     featured = next(m for m in ms if m.id == featured_id)
-    return Board(featured=featured, upcoming=[m for m in ms if m.id != featured_id][:5], generated_at=now)
+    last = sample_recent(now) if recent else []
+    n_up, _ = list_layout(5, len(last))
+    return Board(featured=featured, upcoming=[m for m in ms if m.id != featured_id][:n_up],
+                 generated_at=now, recent=last)

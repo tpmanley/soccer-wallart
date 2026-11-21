@@ -8,6 +8,7 @@ from PIL import Image
 
 from ..competitions import derby_name, style_for
 from ..data.models import Match, Team
+from ..selection import team_perspective
 from . import motifs
 from .canvas import Canvas
 from .layouts import LAYOUTS, Kit
@@ -18,6 +19,27 @@ LX0, LX1 = 542, 790                         # list column
 BANNER_B = 54
 NAMES_T = 345
 STRIP_T = 449
+LIST_T, LIST_B = 64, 454                    # NEXT UP rows (footer below)
+ROW_H, ROW_BOX = 78, 70                     # NEXT UP row pitch and tag-box height
+LAST_HEAD, LAST_ROW, LAST_MAX = 20, 42, 3   # LAST section at the bottom of the list column
+LAST_ROW_MAX = 54                           # LAST rows grow into spare room up to this height
+RESULT_INK = {"W": ("green", "white"), "D": ("yellow", "black"), "L": ("red", "white")}
+
+
+def list_layout(n_upcoming: int, n_recent: int) -> tuple[int, int]:
+    """How many NEXT UP rows and LAST rows fit in the list column.
+
+    Without LAST rows NEXT UP is unchanged. LAST rows take room from the bottom: one result
+    leaves four NEXT UP rows, two or three leave three. At least two NEXT UP rows stay."""
+    if n_recent <= 0:
+        return n_upcoming, 0
+    n_recent = min(n_recent, LAST_MAX)
+    while True:
+        avail = LIST_B - LIST_T - (LAST_HEAD + n_recent * LAST_ROW)
+        n_up = min(n_upcoming, int((avail + ROW_H - ROW_BOX) // ROW_H))
+        if n_up >= min(2, n_upcoming) or n_recent == 1:
+            return n_up, n_recent
+        n_recent -= 1
 
 
 class Formatter:
@@ -157,48 +179,146 @@ def draw_empty(c: Canvas, fmt: Formatter):
 
 
 # ---------------------------------------------------------------------------
+HEADERS = {"next": "NEXT UP", "today": "TODAY", "results": "TODAY'S RESULTS"}
+
+
 def draw_list(c: Canvas, matches: list[Match], fmt: Formatter, favorites: set[str], updated: datetime,
-              battery: int | None = None, pick_broadcast=lambda bs: bs[0] if bs else None):
+              battery: int | None = None, pick_broadcast=lambda bs: bs[0] if bs else None,
+              recent: list[Match] = (), perspective=lambda m: m.home.id,
+              mode: str = "next", results: list[Match] = ()):
+    """The right-hand column. `matches` are fixtures/live games, `results` today's finished games
+    (modes "today"/"results"), `recent` the per-team LAST rows (mode "next" only)."""
     c.rect(LX0, PY0, LX1, BANNER_B, fill="red")
-    c.text((LX0 + LX1) / 2, (PY0 + BANNER_B) / 2 + 1, "NEXT UP", c.slab(24), "white", "mm", spacing=3)
-    y, row_h = 64, 78
-    text_x = LX0 + 54
-    maxw = LX1 - text_x
-    if not matches:
-        c.text((LX0 + LX1) / 2, 230, "NOTHING ELSE", c.condensed(26), "black", "mm", spacing=1)
-        c.text((LX0 + LX1) / 2, 258, "ON THE SCHEDULE", c.condensed(26), "black", "mm", spacing=1)
-    for i, m in enumerate(matches):
-        st = style_for(m.competition.slug, m.competition.name)
-        c.rect(LX0, y, LX0 + 44, y + 70, fill=st.color)
-        tf, _ = c.fit(st.tag, c.condensed, 22, 40)
-        c.text(LX0 + 22, y + 36, st.tag, tf, contrast_on(st.color), "mm")
-        if m.is_live:
-            when, when_ink = f"LIVE {m.status_detail}  ·  {m.home_score}-{m.away_score}", "red"
+    head = HEADERS.get(mode, "NEXT UP")
+    hf, _ = c.fit(head, c.slab, 24, LX1 - LX0 - 16, min_size=16, spacing=3)
+    c.text((LX0 + LX1) / 2, (PY0 + BANNER_B) / 2 + 1, head, hf, "white", "mm", spacing=3)
+    if mode != "next":
+        recent = ()
+    n_up, n_recent = list_layout(len(matches), len(recent))
+    matches, recent = matches[:n_up], list(recent)[:n_recent]
+    rows = [(m, False) for m in matches] + [(m, True) for m in results]
+    if recent:
+        up_bottom = LIST_T + max(0, n_up * ROW_H - (ROW_H - ROW_BOX))
+        draw_recent(c, recent, perspective, fmt, max(up_bottom + 10, LIST_T + 140 if not matches else 0))
+    if not rows:
+        mid = 230 if not recent else (LIST_T + LIST_B - LAST_HEAD - n_recent * LAST_ROW) / 2 - 14
+        c.text((LX0 + LX1) / 2, mid, "NOTHING ELSE", c.condensed(26), "black", "mm", spacing=1)
+        c.text((LX0 + LX1) / 2, mid + 28, "ON THE SCHEDULE", c.condensed(26), "black", "mm", spacing=1)
+    y = LIST_T
+    for i, (m, is_result) in enumerate(rows):
+        if is_result:
+            _result_row(c, m, y, favorites, perspective)
         else:
-            when, when_ink = f"{fmt.month_day(m.kickoff)}  ·  {fmt.time(m.kickoff).replace(' ', '')}", "red"
-        when_font = c.condensed(18)
-        c.text(text_x, y + 4, when, when_font, when_ink, "la", spacing=0.5)
-        # Network right-aligned on the same line, only if it fits beside the date/time.
-        if not m.is_live and (b := pick_broadcast(m.broadcasts)):
-            room = maxw - c.text_width(when, when_font, 0.5) - 8
-            bf, bsz = c.fit(b.upper(), c.condensed, 15, room, min_size=12, spacing=0.5)
-            if c.text_width(b.upper(), bf, 0.5) <= room:
-                c.text(LX1, y + 6, b.upper(), bf, "black", "ra", spacing=0.5)
-        for j, (prefix, team) in enumerate((("", m.home), ("vs ", m.away))):
-            label = team.short_name.upper()
-            ink = "blue" if team.id in favorites else "black"
-            f, sz = c.fit(prefix + label, lambda s: c.geo(s, 700), 16, maxw, min_size=12)
-            if sz <= 12 and c.text_width(prefix + label, f) > maxw:
-                label = team.abbreviation
-            c.text(text_x, y + 24 + j * 22, prefix + label, f, ink, "la")
-        y += row_h
-        if i < len(matches) - 1:
-            c.rect(text_x, y - 6, LX1, y - 4.5, fill="black")
+            _fixture_row(c, m, y, fmt, favorites, pick_broadcast)
+        y += ROW_H
+        if i < len(rows) - 1:
+            c.rect(LX0 + 54, y - 6, LX1, y - 4.5, fill="black")
     c.rect(LX0, 456, LX1, PY1, fill="black")
     foot = f"UPDATED {fmt.day(updated, relative=False)} {fmt.time(updated)}"
     if battery is not None:
         foot += f"  ·  BATT {battery}%"
     c.text((LX0 + LX1) / 2, 463.5, foot, c.condensed(13), "white", "mm", spacing=1)
+
+
+def _fixture_row(c: Canvas, m: Match, y: float, fmt: Formatter, favorites: set[str], pick_broadcast):
+    text_x = LX0 + 54
+    maxw = LX1 - text_x
+    st = style_for(m.competition.slug, m.competition.name)
+    c.rect(LX0, y, LX0 + 44, y + ROW_BOX, fill=st.color)
+    tf, _ = c.fit(st.tag, c.condensed, 22, 40)
+    c.text(LX0 + 22, y + 36, st.tag, tf, contrast_on(st.color), "mm")
+    if m.is_live:
+        when, when_ink = f"LIVE {m.status_detail}  ·  {m.home_score}-{m.away_score}", "red"
+    else:
+        when, when_ink = f"{fmt.month_day(m.kickoff)}  ·  {fmt.time(m.kickoff).replace(' ', '')}", "red"
+    when_font = c.condensed(18)
+    c.text(text_x, y + 4, when, when_font, when_ink, "la", spacing=0.5)
+    # Network right-aligned on the same line, only if it fits beside the date/time.
+    if not m.is_live and (b := pick_broadcast(m.broadcasts)):
+        room = maxw - c.text_width(when, when_font, 0.5) - 8
+        bf, bsz = c.fit(b.upper(), c.condensed, 15, room, min_size=12, spacing=0.5)
+        if c.text_width(b.upper(), bf, 0.5) <= room:
+            c.text(LX1, y + 6, b.upper(), bf, "black", "ra", spacing=0.5)
+    for j, (prefix, team) in enumerate((("", m.home), ("vs ", m.away))):
+        label = team.short_name.upper()
+        ink = "blue" if team.id in favorites else "black"
+        f, sz = c.fit(prefix + label, lambda s: c.geo(s, 700), 16, maxw, min_size=12)
+        if sz <= 12 and c.text_width(prefix + label, f) > maxw:
+            label = team.abbreviation
+        c.text(text_x, y + 24 + j * 22, prefix + label, f, ink, "la")
+
+
+def _result_row(c: Canvas, m: Match, y: float, favorites: set[str], perspective):
+    """A finished game, laid out like a fixture row: W/D/L from your team's side in the box
+    (a neutral FT for league games without one of your teams), then the score on each line."""
+    text_x = LX0 + 54
+    st = style_for(m.competition.slug, m.competition.name)
+    mine = bool(m.team_ids & favorites)
+    outcome = m.outcome_for(perspective(m)) if mine else None
+    if outcome:
+        box, ink = RESULT_INK[outcome]
+        c.rect(LX0, y, LX0 + 44, y + ROW_BOX, fill=box)
+        c.text(LX0 + 22, y + ROW_BOX / 2 + 1, outcome, c.slab(30), ink, "mm")
+    else:
+        c.rect(LX0, y, LX0 + 44, y + ROW_BOX, fill="black")
+        c.text(LX0 + 22, y + ROW_BOX / 2 + 1, "FT", c.condensed(26), "white", "mm", spacing=1)
+    detail = [st.tag, "FULL TIME"]
+    if m.winner and m.home_score == m.away_score:
+        detail.append(f"{(m.home if m.winner == 'home' else m.away).abbreviation} ON PENS")
+    c.text(text_x, y + 4, "  ·  ".join(detail), c.condensed(18), "red", "la", spacing=0.5)
+    score_font = c.geo(18, 800)
+    score_w = c.text_width("00", score_font)
+    maxw = LX1 - text_x - score_w - 8
+    for j, (prefix, team, goals) in enumerate((("", m.home, m.home_score), ("vs ", m.away, m.away_score))):
+        label = team.short_name.upper()
+        ink = "blue" if team.id in favorites else "black"
+        f, sz = c.fit(prefix + label, lambda s: c.geo(s, 700), 16, maxw, min_size=12)
+        if sz <= 12 and c.text_width(prefix + label, f) > maxw:
+            label = team.abbreviation
+        c.text(text_x, y + 24 + j * 22, prefix + label, f, ink, "la")
+        c.text(LX1, y + 22 + j * 22, str(goals), score_font, "black", "ra")
+
+
+def _last_day(fmt: Formatter, dt: datetime) -> str:
+    return f"{fmt.local(dt).strftime('%a').upper()} {fmt.month_day(dt)}"   # "SAT NOV 15"
+
+
+def draw_recent(c: Canvas, results: list[Match], perspective, fmt: Formatter, top: float):
+    """The LAST section, from `top` down to the footer: a header band, then one row per result
+    told from the favourite team's side:  [W]  MIN 2–1 vs ST. LOUIS / SAT OCT 24 · MLS."""
+    row = min(LAST_ROW_MAX, (LIST_B - top - LAST_HEAD) / len(results))
+    top = LIST_B - LAST_HEAD - row * len(results)      # spare room goes above the section
+    c.rect(LX0, top, LX1, top + LAST_HEAD - 4, fill="black")
+    head = "LAST RESULT" if len(results) == 1 else "LAST RESULTS"
+    c.text((LX0 + LX1) / 2, top + (LAST_HEAD - 4) / 2 + 0.5, head, c.condensed(15), "yellow", "mm", spacing=2)
+    text_x = LX0 + 54
+    maxw = LX1 - text_x
+    big = row >= 48                                     # one or two results: roomier type
+    name_font, detail_font = c.geo(18 if big else 16, 700), c.condensed(18 if big else 16)
+    y = top + LAST_HEAD + 2
+    for m in results:
+        team_id = perspective(m)
+        outcome = m.outcome_for(team_id) or "D"
+        box, ink = RESULT_INK[outcome]
+        bh = row - 8
+        c.rect(LX0, y, LX0 + 44, y + bh, fill=box)
+        c.text(LX0 + 22, y + bh / 2 + 1, outcome, c.slab(28 if big else 22), ink, "mm")
+        home = team_id == m.home.id
+        us, them = (m.home, m.away) if home else (m.away, m.home)
+        gf, ga = (m.home_score, m.away_score) if home else (m.away_score, m.home_score)
+        lead = f"{us.abbreviation} {gf}–{ga} {'vs' if home else 'at'} "
+        opp = them.short_name.upper()
+        if c.text_width(lead + opp, name_font) > maxw:
+            opp = them.abbreviation
+        detail = [_last_day(fmt, m.kickoff), style_for(m.competition.slug, m.competition.name).tag]
+        if m.winner and gf == ga:
+            detail.append("PENS")
+        # Two lines centred on the box, like the NEXT UP rows: teams + score, then when + where.
+        y1 = y + bh / 2 - (22 if big else 19)
+        c.text(text_x, y1, lead + opp, name_font, "black", "la")
+        c.text(text_x, y1, us.abbreviation, name_font, "blue", "la")   # favourite in blue
+        c.text(text_x, y1 + (23 if big else 20), "  ·  ".join(detail), detail_font, "red", "la", spacing=0.5)
+        y += row
 
 
 def render_board(board, cfg, now: datetime | None = None, layout: str | None = None,
@@ -213,5 +333,6 @@ def render_board(board, cfg, now: datetime | None = None, layout: str | None = N
     else:
         draw_empty(c, fmt)
     draw_list(c, board.upcoming, fmt, cfg.team_ids, board.generated_at, battery,
-              cfg.pick_broadcast)
+              cfg.pick_broadcast, board.recent, lambda m: team_perspective(m, cfg),
+              board.mode, board.results)
     return c.img

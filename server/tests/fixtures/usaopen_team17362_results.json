@@ -1,0 +1,104 @@
+{
+ "events": [
+  {
+   "id": "401869713",
+   "date": "2026-04-29T02:00Z",
+   "competitions": [
+    {
+     "date": "2026-04-29T02:00Z",
+     "status": {
+      "type": {
+       "name": "STATUS_FULL_TIME",
+       "state": "post",
+       "completed": true,
+       "shortDetail": "FT"
+      }
+     },
+     "venue": {
+      "fullName": "PayPal Park"
+     },
+     "competitors": [
+      {
+       "homeAway": "home",
+       "winner": true,
+       "score": {
+        "value": 4.0,
+        "displayValue": "4"
+       },
+       "team": {
+        "id": "191",
+        "abbreviation": "SJ",
+        "displayName": "San Jose Earthquakes",
+        "shortDisplayName": "San Jose"
+       }
+      },
+      {
+       "homeAway": "away",
+       "winner": false,
+       "score": {
+        "value": 2.0,
+        "displayValue": "2"
+       },
+       "team": {
+        "id": "17362",
+        "abbreviation": "MIN",
+        "displayName": "Minnesota United FC",
+        "shortDisplayName": "Minnesota"
+       }
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "id": "401867361",
+   "date": "2026-04-15T02:00Z",
+   "competitions": [
+    {
+     "date": "2026-04-15T02:00Z",
+     "status": {
+      "type": {
+       "name": "STATUS_FINAL_PEN",
+       "state": "post",
+       "completed": true,
+       "shortDetail": "FT-Pens"
+      }
+     },
+     "venue": {
+      "fullName": "Heart Health Park"
+     },
+     "competitors": [
+      {
+       "homeAway": "home",
+       "winner": false,
+       "score": {
+        "value": 0.0,
+        "displayValue": "0"
+       },
+       "team": {
+        "id": "17828",
+        "abbreviation": "SAC",
+        "displayName": "Sacramento Republic FC",
+        "shortDisplayName": "Sacramento"
+       }
+      },
+      {
+       "homeAway": "away",
+       "winner": true,
+       "score": {
+        "value": 0.0,
+        "displayValue": "0"
+       },
+       "team": {
+        "id": "17362",
+        "abbreviation": "MIN",
+        "displayName": "Minnesota United FC",
+        "shortDisplayName": "Minnesota"
+       }
+      }
+     ]
+    }
+   ]
+  }
+ ]
+}
