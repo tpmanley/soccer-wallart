@@ -43,6 +43,9 @@ class DisplayConfig(BaseModel):
     height: int = 480
     clock: str = "12h"  # or "24h"
     rotate: Literal[0, 180] = 0  # 180 if the frame hangs the other way up
+    # Battery level only forces a redraw when it crosses this threshold. Otherwise the footer's
+    # BATT % refreshes whenever the frame redraws for another reason (at least once a day).
+    low_battery_percent: int = 20
 
 
 # US over-the-air networks: free with an antenna, so they count as "available" by default.

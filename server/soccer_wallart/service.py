@@ -29,6 +29,13 @@ class Frame:
     sleep_seconds: int
 
 
+def battery_state(battery: int | None, low_percent: int) -> str | None:
+    """The part of the battery level that is allowed to force a redraw."""
+    if battery is None:
+        return None
+    return "low" if battery < low_percent else "ok"
+
+
 class Service:
     def __init__(self, cfg: Config, provider: EspnProvider | None = None,
                  listings: LiveSoccerTV | None = None):
@@ -81,10 +88,11 @@ class Service:
         native = pack_native(np.rot90(idx, 2) if self.cfg.display.rotate == 180 else idx)
         # The ETag hashes the board *content* (plus the local date, since "TODAY"/"TOMORROW" labels
         # change at midnight) rather than the pixels, so the "updated" footer clock alone never
-        # forces a slow e-ink refresh.
+        # forces a slow e-ink refresh. The battery only counts as low/ok: the fuel gauge jumps
+        # around while charging and for a while after, and each jump would otherwise redraw.
         sig = repr([(m.id, m.state, m.home_score, m.away_score, m.kickoff,
                      self.cfg.pick_broadcast(m.broadcasts)) for m in
                     ([board.featured] if board.featured else []) + board.upcoming])
-        sig += f"|{layout}|{self.cfg.display.rotate}|{battery // 10 if battery is not None else None}|{now.astimezone(self.cfg.tz).date()}"
+        sig += f"|{layout}|{self.cfg.display.rotate}|{battery_state(battery, self.cfg.display.low_battery_percent)}|{now.astimezone(self.cfg.tz).date()}"
         etag = hashlib.sha1(sig.encode()).hexdigest()[:16]
         return Frame(board, indices_to_png(idx), native, etag, next_wake_seconds(board, self.cfg, now))

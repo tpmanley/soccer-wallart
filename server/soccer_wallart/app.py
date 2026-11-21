@@ -19,7 +19,7 @@ from fastapi.responses import HTMLResponse
 from .art.layouts import LAYOUTS
 from .config import load_config
 from .sample import sample_board, sample_matches
-from .service import Frame, Service
+from .service import Frame, Service, battery_state
 
 app = FastAPI(title="Soccer Wall Art")
 _cfg = load_config()
@@ -30,8 +30,8 @@ MEMO_SECONDS = 60
 
 
 def _frame(layout: str | None, battery: int | None) -> Frame:
-    """Render at most once a minute per (layout, battery bucket); ESPN data is cached separately."""
-    key = (layout, None if battery is None else battery // 10)
+    """Render at most once a minute per (layout, battery state); ESPN data is cached separately."""
+    key = (layout, battery_state(battery, _cfg.display.low_battery_percent))
     with _lock:
         hit = _memo.get(key)
         if hit and time.time() - hit[0] < MEMO_SECONDS:

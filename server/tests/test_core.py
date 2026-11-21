@@ -242,6 +242,16 @@ def test_etag_stable_across_clock_but_changes_with_score():
     assert svc.render(b, NOW).etag != e1
 
 
+def test_battery_changes_only_redraw_when_crossing_low():
+    c = cfg()
+    svc = Service(c, provider=object())
+    b = sample_board("s1", NOW)
+    e = {pct: svc.render(b, NOW, battery=pct).etag for pct in (19, 25, 31, 72, 100, 5)}
+    assert e[25] == e[31] == e[72] == e[100]        # charging/gauge jumps don't redraw
+    assert e[19] == e[5] != e[25]                   # dropping below 20% does
+    assert svc.render(b, NOW).etag not in (e[19], e[25])  # no battery reported is its own state
+
+
 def test_letterbox_other_panel_size():
     design = Image.new("RGB", (2400, 1440), (255, 255, 255))
     idx = to_panel(design, 1600, 1200)

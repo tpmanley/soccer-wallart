@@ -45,6 +45,7 @@ display:
   height: 480
   clock: 12h                 # or 24h
   rotate: 0                  # 180 if the image shows upside down on the frame
+  low_battery_percent: 20    # battery changes only force a redraw when crossing this
 
 cache_dir: .cache
 cache_ttl_minutes: 60
